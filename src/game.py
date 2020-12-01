@@ -93,7 +93,7 @@ class Game():
                 elif event.key == K_SPACE:
                     self.player.jump()
 
-            # if event.type == KEYUP:
+            if event.type == KEYUP:
             #     if event.key == pygame.K_RETURN:
             #         self.START_KEY = False
             #     if event.key == K_BACKSPACE:
