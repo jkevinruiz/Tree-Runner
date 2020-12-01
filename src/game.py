@@ -3,7 +3,7 @@ import pygame
 
 from pygame.locals import *
 from src.menu import CreditsMenu, MainMenu, OptionsMenu
-from src.camera import Camera, Auto
+from src.camera import Camera, Auto, Follow
 from src.tilemap import TileMap
 from src.player import Player
 
@@ -33,7 +33,8 @@ class Game():
         self.player = Player()
         self.camera = Camera(self.player)
         self.auto_scroll = Auto(self.camera, self.player)
-        self.camera.set_method(self.auto_scroll)
+        self.follow_scroll = Follow(self.camera, self.player)
+        self.camera.set_method(self.follow_scroll)
         self.player.position.x = self.map.start_x
         self.player.position.y = self.map.start_y
         self.background = pygame.image.load(
@@ -57,9 +58,9 @@ class Game():
             self.canvas.fill(self.BLACK)
             # self.draw_text('Thanks for Playing', 20,
             #                self.CANVAS_W/2, self.CANVAS_H/2)
-            self.canvas.blit(self.background, (0, 0))
-            self.map.draw_map(self.canvas)
-            self.player.draw_player(self.canvas)
+            self.canvas.blit(self.background, (0 - self.camera.offset.x, 0 - self.camera.offset.y))
+            self.map.draw_map(self.canvas, self.camera)
+            self.player.draw_player(self.canvas, self.camera)
             self.window.blit(pygame.transform.scale(
                 self.canvas, (self.WINDOW_W, self.WINDOW_H)), (0, 0))
             pygame.display.update()

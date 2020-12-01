@@ -17,9 +17,9 @@ class Player():
             0, 0), pygame.math.Vector2(0, 0)
         self.acceleration = pygame.math.Vector2(0, self.gravity)
 
-    def draw_player(self, surface):
+    def draw_player(self, surface, camera):
         surface.blit(pygame.transform.flip(
-            self.image, self.FACING_LEFT, False), (self.rect.x, self.rect.y))
+            self.image, self.FACING_LEFT, False), (self.rect.x - camera.offset.x, self.rect.y - camera.offset.y))
 
     def update(self, delta_time, tiles):
         self.horizontal_movement(delta_time)

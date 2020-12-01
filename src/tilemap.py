@@ -16,8 +16,8 @@ class TileMap():
         self.map_surface.set_colorkey((0, 0, 0))
         self.load_map()
 
-    def draw_map(self, surface):
-        surface.blit(self.map_surface, (0, 0))
+    def draw_map(self, surface, camera):
+        surface.blit(self.map_surface, (0 - camera.offset.x, 0 - camera.offset.y))
 
     def load_map(self):
         for tile in self.tiles:
