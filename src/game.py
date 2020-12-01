@@ -4,6 +4,7 @@ import pygame
 from pygame.locals import *
 from src.menu import CreditsMenu, MainMenu, OptionsMenu
 from src.camera import Camera, Auto, Follow
+from src.coin import Coin
 from src.tilemap import TileMap
 from src.player import Player
 
@@ -33,9 +34,11 @@ class Game():
         self.map = TileMap('map.csv')
         self.player = Player()
         self.camera = Camera(self.player)
+        self.map = TileMap('map.csv')
+        # self.coin_list = [Coin(self, 80, 130), Coin(self, 200, 130), Coin(self, 310, 130)]
         self.auto_scroll = Auto(self.camera, self.player)
         self.follow_scroll = Follow(self.camera, self.player)
-        self.camera.set_method(self.auto_scroll)
+        self.camera.set_method(self.follow_scroll)
         self.player.position.x = self.map.start_x
         self.player.position.y = self.map.start_y
         self.background = pygame.image.load(
@@ -54,6 +57,7 @@ class Game():
             if self.START_KEY:
                 self.playing = False
 
+            # self.player.update(delta_time, self.map.tiles, self.coin_list)
             self.player.update(delta_time, self.map.tiles)
             self.camera.scroll()
             self.canvas.fill(self.BLACK)
@@ -61,6 +65,9 @@ class Game():
             #                self.CANVAS_W/2, self.CANVAS_H/2)
             self.canvas.blit(self.background, (0 - self.camera.offset.x, 0 - self.camera.offset.y))
             self.map.draw_map(self.canvas, self.camera)
+            # self.coin.draw_coin()
+            # for coin in self.coin_list:
+            #     coin.draw_coin()
             self.player.draw_player(self.canvas, self.camera)
             self.window.blit(pygame.transform.scale(
                 self.canvas, (self.WINDOW_W, self.WINDOW_H)), (0, 0))

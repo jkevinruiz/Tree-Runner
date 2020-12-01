@@ -26,6 +26,7 @@ class Player():
         self.check_collisionsx(tiles)
         self.vertical_movement(delta_time)
         self.check_collisionsy(tiles)
+        # self.check_object_collisions(sprites)
         self.animate()
 
     def horizontal_movement(self, delta_time):
@@ -97,6 +98,17 @@ class Player():
                 self.velocity.y = 0
                 self.position.y = tile.rect.bottom + self.rect.h
                 self.rect.bottom = self.position.y
+    
+    def check_object_collisions(self, tiles):
+        collisions = self.get_hits(tiles)
+        
+        for tile in collisions:
+            # TODO: play pickup sound
+            if tile.type == 'gold':
+                # TODO: increase gold coin count
+                pass
+                tiles.remove(tile)
+
 
     def load_animations(self):
         self.animation_database = {

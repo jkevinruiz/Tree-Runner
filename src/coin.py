@@ -1,32 +1,11 @@
 import pygame
-import random
-
-
-class Object():
-    def __init__(self, game, x, y):
-        self.game = game
-        self.rect = pygame.Rect(0, 0, 16, 16)
-        self.image = pygame.Surface((16, 16))
-        self.rect.x = x
-        self.rect.y = y
-        self.touched = False
-
-    def animate(self):
-        pass
-
-    def draw_object(self):
-        self.animate()
-        rel_x = self.rect.x - self.game.camera.offset.x
-        rel_y = self.rect.y - self.game.camera.offset.y
-        self.game.canvas.blit(self.image, (rel_x, rel_y))
-
-
 class Coin():
     def __init__(self, game, x, y):
         self.animation_database = {}
         self.animation_images = {}
         self.load_animations()
         self.state = 'spin'
+        self.type = 'gold'
         self.current_frame = 0
         self.game = game
         self.image = self.animation_images['gold_1']
@@ -38,11 +17,12 @@ class Coin():
         self.animate()
         self.game.canvas.blit(
             self.image, (self.rect.x - self.game.camera.offset.x, self.rect.y - self.game.camera.offset.y))
+        # self.game.canvas.blit(self.image, (self.rect.x , self.rect.y))
 
 
     def load_animations(self):
         self.animation_database = {
-            'spin': self.create_animation_list_database('assets/coin/gold', [5, 5, 5, 5])
+            'spin': self.create_animation_list_database('assets/coin/gold', [10, 10, 10, 10])
         }
 
 
@@ -69,7 +49,7 @@ class Coin():
         if self.current_frame >= len(self.animation_database[self.state]):
             self.current_frame = 0
         animation_id = self.animation_database[self.state][self.current_frame]
-        self.iamge = self.animation_images[animation_id]
+        self.image = self.animation_images[animation_id]
 
 
     def collect(self):
