@@ -11,8 +11,9 @@ class Player():
         self.current_frame = 0
         self.state = 'idle'
         self.LEFT_KEY, self.RIGHT_KEY, self.FACING_LEFT = False, False, False
+        self.LSHIFT_KEY = False
         self.isJumping, self.on_ground = False, False
-        self.gravity, self.friction = .35, -.12
+        self.gravity, self.friction = .35, -.15
         self.position, self.velocity = pygame.math.Vector2(
             0, 0), pygame.math.Vector2(0, 0)
         self.acceleration = pygame.math.Vector2(0, self.gravity)
@@ -31,10 +32,13 @@ class Player():
 
     def horizontal_movement(self, delta_time):
         self.acceleration.x = 0
+        acceleration_speed = .2
+        if self.LSHIFT_KEY:
+            acceleration_speed = .4
         if self.LEFT_KEY:
-            self.acceleration.x -= .3
+            self.acceleration.x -= acceleration_speed
         elif self.RIGHT_KEY:
-            self.acceleration.x += .3
+            self.acceleration.x += acceleration_speed
 
         self.acceleration.x += self.velocity.x * self.friction
         self.velocity.x += self.acceleration.x * delta_time

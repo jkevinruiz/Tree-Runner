@@ -38,7 +38,7 @@ class Game():
         # self.coin_list = [Coin(self, 80, 130), Coin(self, 200, 130), Coin(self, 310, 130)]
         self.auto_scroll = Auto(self.camera, self.player)
         self.follow_scroll = Follow(self.camera, self.player)
-        self.camera.set_method(self.follow_scroll)
+        self.camera.set_method(self.auto_scroll)
         self.player.position.x = self.map.start_x
         self.player.position.y = self.map.start_y
         self.background = pygame.image.load(
@@ -56,6 +56,11 @@ class Game():
             self.check_events()
             if self.START_KEY:
                 self.playing = False
+            
+            if self.player.rect.x + self.player.rect.w/2 <= self.camera.offset.x:
+                print('player is touching the boundary')
+            
+            print(self.player.velocity.x)
 
             # self.player.update(delta_time, self.map.tiles, self.coin_list)
             self.player.update(delta_time, self.map.tiles)
@@ -99,6 +104,8 @@ class Game():
                     self.player.RIGHT_KEY, self.player.FACING_LEFT = True, False
                 elif event.key == K_SPACE:
                     self.player.jump()
+                elif event.key == K_LSHIFT:
+                    self.player.LSHIFT_KEY = True
 
             if event.type == KEYUP:
             #     if event.key == pygame.K_RETURN:
@@ -118,6 +125,8 @@ class Game():
                     if self.player.isJumping:
                         self.player.velocity.y *= .25
                         self.player.isJumping = False
+                elif event.key == K_LSHIFT:
+                    self.player.LSHIFT_KEY = False
 
     def draw_text(self, text, size, x, y):
         font = pygame.font.Font(self.font_name, size)
