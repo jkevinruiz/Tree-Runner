@@ -22,6 +22,7 @@ class Game():
         self.WINDOW_H = 400
         self.CANVAS_W = 384
         self.CANVAS_H = 216
+        self.TITLE = 'Tree Runner'
         self.TARGET_FPS = 60
         self.BLACK = (0, 0, 0)
         self.WHITE = (255, 255, 255)
@@ -34,7 +35,7 @@ class Game():
         self.camera = Camera(self.player)
         self.auto_scroll = Auto(self.camera, self.player)
         self.follow_scroll = Follow(self.camera, self.player)
-        self.camera.set_method(self.follow_scroll)
+        self.camera.set_method(self.auto_scroll)
         self.player.position.x = self.map.start_x
         self.player.position.y = self.map.start_y
         self.background = pygame.image.load(
