@@ -10,7 +10,7 @@ from src.tile import Tile
 class TileMap():
     def __init__(self, filename):
         self.tile_size = 16
-        self.start_x, self.start_y = 0, 0
+        self.start_x, self.start_y = 60, 160
         self.tiles = self.load_tiles(filename)
         self.map_surface = pygame.Surface((self.map_w, self.map_h))
         self.map_surface.set_colorkey((0, 0, 0))

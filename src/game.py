@@ -31,16 +31,15 @@ class Game():
         self.canvas = pygame.Surface((self.CANVAS_W, self.CANVAS_H))
         self.window = pygame.display.set_mode((self.WINDOW_W, self.WINDOW_H))
         self.clock = pygame.time.Clock()
-        self.map = TileMap('map.csv')
+        self.map = TileMap('assets/maps/level_1.csv')
         self.player = Player()
         self.camera = Camera(self.player)
-        self.map = TileMap('map.csv')
         # self.coin_list = [Coin(self, 80, 130), Coin(self, 200, 130), Coin(self, 310, 130)]
         self.auto_scroll = Auto(self.camera, self.player)
         self.follow_scroll = Follow(self.camera, self.player)
         self.camera.set_method(self.auto_scroll)
-        self.player.position.x = self.map.start_x
-        self.player.position.y = self.map.start_y
+        self.player.position.x = 100 
+        self.player.position.y = 100
         self.background = pygame.image.load(
             'assets/background/background.png').convert()
         self.main_menu = MainMenu(self)
@@ -68,7 +67,7 @@ class Game():
             self.canvas.fill(self.BLACK)
             # self.draw_text('Thanks for Playing', 20,
             #                self.CANVAS_W/2, self.CANVAS_H/2)
-            self.canvas.blit(self.background, (0 - self.camera.offset.x, 0 - self.camera.offset.y))
+            self.canvas.blit(self.background, (0, 0 - self.camera.offset.y))
             self.map.draw_map(self.canvas, self.camera)
             # self.coin.draw_coin()
             # for coin in self.coin_list:
