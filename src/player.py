@@ -22,12 +22,12 @@ class Player():
         surface.blit(pygame.transform.flip(
             self.image, self.FACING_LEFT, False), (self.rect.x - camera.offset.x, self.rect.y - camera.offset.y))
 
-    def update(self, delta_time, tiles):
+    def update(self, delta_time, tiles, coins):
         self.horizontal_movement(delta_time)
         self.check_collisionsx(tiles)
         self.vertical_movement(delta_time)
         self.check_collisionsy(tiles)
-        # self.check_object_collisions(sprites)
+        self.check_object_collisions(coins)
         self.animate()
 
     def horizontal_movement(self, delta_time):

@@ -31,10 +31,10 @@ class Game():
         self.canvas = pygame.Surface((self.CANVAS_W, self.CANVAS_H))
         self.window = pygame.display.set_mode((self.WINDOW_W, self.WINDOW_H))
         self.clock = pygame.time.Clock()
-        self.map = TileMap('assets/maps/level_1.csv')
         self.player = Player()
         self.camera = Camera(self.player)
-        # self.coin_list = [Coin(self, 80, 130), Coin(self, 200, 130), Coin(self, 310, 130)]
+        self.map = TileMap(self, 'assets/maps/level_1_alpha.csv')
+        self.coin_list = self.map.coins 
         self.auto_scroll = Auto(self.camera, self.player)
         self.follow_scroll = Follow(self.camera, self.player)
         self.camera.set_method(self.auto_scroll)
@@ -61,8 +61,8 @@ class Game():
             
             print(self.player.velocity.x)
 
-            # self.player.update(delta_time, self.map.tiles, self.coin_list)
-            self.player.update(delta_time, self.map.tiles)
+            self.player.update(delta_time, self.map.tiles, self.coin_list)
+            # self.player.update(delta_time, self.map.tiles)
             self.camera.scroll()
             self.canvas.fill(self.BLACK)
             # self.draw_text('Thanks for Playing', 20,
@@ -70,8 +70,8 @@ class Game():
             self.canvas.blit(self.background, (0, 0 - self.camera.offset.y))
             self.map.draw_map(self.canvas, self.camera)
             # self.coin.draw_coin()
-            # for coin in self.coin_list:
-            #     coin.draw_coin()
+            for coin in self.coin_list:
+                coin.draw_coin()
             self.player.draw_player(self.canvas, self.camera)
             self.window.blit(pygame.transform.scale(
                 self.canvas, (self.WINDOW_W, self.WINDOW_H)), (0, 0))
