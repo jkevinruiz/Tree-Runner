@@ -2,7 +2,8 @@ import pygame
 
 
 class Player():
-    def __init__(self):
+    def __init__(self, game):
+        self.game = game
         self.animation_database = {}
         self.animation_images = {}
         self.load_animations()
@@ -107,10 +108,9 @@ class Player():
         collisions = self.get_hits(tiles)
         
         for tile in collisions:
-            # TODO: play pickup sound
             if tile.type == 'gold':
-                # TODO: increase gold coin count
-                pass
+                tile.pickup_sound.play()
+                self.game.GOLD_COUNT += 1
                 tiles.remove(tile)
 
 

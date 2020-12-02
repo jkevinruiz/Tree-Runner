@@ -12,6 +12,7 @@ class Coin():
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        self.pickup_sound = pygame.mixer.Sound('assets/sfx/pickup_coin.wav')
 
     def draw_coin(self):
         self.animate()

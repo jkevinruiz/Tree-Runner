@@ -1,4 +1,5 @@
 import sys
+import random
 import pygame
 
 from pygame.locals import *
@@ -9,8 +10,7 @@ from src.tilemap import TileMap
 from src.player import Player
 
 pygame.init()
-
-
+pygame.mixer.pre_init(44100, -16, 2, 512)
 class Game():
     def __init__(self):
         self.running = True
@@ -27,11 +27,15 @@ class Game():
         self.TARGET_FPS = 60
         self.BLACK = (0, 0, 0)
         self.WHITE = (255, 255, 255)
+        self.GOLD_COUNT = 0
+        self.jump_sound = pygame.mixer.Sound('assets/sfx/jump_0.wav')
+        pygame.mixer.music.load('assets/bgm/track4.ogg')
+        pygame.mixer.music.play(-1)
         self.font_name = 'assets/font/8-BIT WONDER.TTF'
         self.canvas = pygame.Surface((self.CANVAS_W, self.CANVAS_H))
         self.window = pygame.display.set_mode((self.WINDOW_W, self.WINDOW_H))
         self.clock = pygame.time.Clock()
-        self.player = Player()
+        self.player = Player(self)
         self.camera = Camera(self.player)
         self.map = TileMap(self, 'assets/maps/level_1_alpha.csv')
         self.coin_list = self.map.coins 
@@ -59,7 +63,8 @@ class Game():
             if self.player.rect.x + self.player.rect.w/2 <= self.camera.offset.x:
                 print('player is touching the boundary')
             
-            print(self.player.velocity.x)
+            
+            # print(self.player.velocity.x)
 
             self.player.update(delta_time, self.map.tiles, self.coin_list)
             # self.player.update(delta_time, self.map.tiles)
@@ -73,6 +78,8 @@ class Game():
             for coin in self.coin_list:
                 coin.draw_coin()
             self.player.draw_player(self.canvas, self.camera)
+            self.canvas.blit(pygame.image.load('assets/coin/gold/gold_1.png'), (4, 11))
+            self.draw_text(f' x {str(self.GOLD_COUNT)}', 10, 36, 16)
             self.window.blit(pygame.transform.scale(
                 self.canvas, (self.WINDOW_W, self.WINDOW_H)), (0, 0))
             pygame.display.update()
@@ -99,9 +106,11 @@ class Game():
 
                 if event.key == K_LEFT:
                     self.player.LEFT_KEY, self.player.FACING_LEFT = True, True
+
                 elif event.key == K_RIGHT:
                     self.player.RIGHT_KEY, self.player.FACING_LEFT = True, False
                 elif event.key == K_SPACE:
+                    self.jump_sound.play()
                     self.player.jump()
                 elif event.key == K_LSHIFT:
                     self.player.LSHIFT_KEY = True
