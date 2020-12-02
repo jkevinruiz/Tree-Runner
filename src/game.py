@@ -19,8 +19,8 @@ class Game():
         self.DOWN_KEY = False
         self.START_KEY = False
         self.BACK_KEY = False
-        self.WINDOW_W = 600
-        self.WINDOW_H = 400
+        self.WINDOW_W = 800
+        self.WINDOW_H = 500
         self.CANVAS_W = 384
         self.CANVAS_H = 216
         self.TITLE = 'Tree Runner'

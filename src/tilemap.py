@@ -22,14 +22,15 @@ class TileMap():
         self.load_map()
 
     def draw_map(self, surface, camera):
-        surface.blit(self.map_surface, (0 - camera.offset.x, 0 - camera.offset.y))
+        surface.blit(self.map_surface,
+                     (0 - camera.offset.x, 0 - camera.offset.y))
 
     def load_map(self):
         for tile in self.tiles:
             tile.draw_tile(self.map_surface)
-        
+
         for decor in self.decors:
-            decor.draw_tile(self.map_surface)
+            self.map_surface.blit(decor[0], (decor[1], decor[2]))
 
     def read_csv(self, filename):
         map = []
@@ -47,16 +48,18 @@ class TileMap():
         for row in map:
             x = 0
             for tile in row:
-                if tile == 'X':
-                    self.start_x, self.start_y = x * self.tile_size, y * self.tile_size
+                if tile == '0':
+                    self.decors.append([pygame.image.load('assets/tiles/decor.png'),
+                                       x * self.tile_size, y * self.tile_size])
                 elif tile == '1':
                     self.tiles.append(Tile('assets/tiles/grass.png',
-                                      x * self.tile_size, y * self.tile_size))
+                                           x * self.tile_size, y * self.tile_size))
                 elif tile == '2':
                     self.tiles.append(Tile('assets/tiles/dirt.png', x *
-                                      self.tile_size, y * self.tile_size))
+                                           self.tile_size, y * self.tile_size))
                 elif tile == '3':
-                    self.coins.append(Coin(self.game, x * self.tile_size, y * self.tile_size))
+                    self.coins.append(
+                        Coin(self.game, x * self.tile_size, y * self.tile_size))
 
                 x += 1  # move to the next tile in the row
             y += 1  # move to the next row
