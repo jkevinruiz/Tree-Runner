@@ -1,4 +1,4 @@
-import sys
+
 import random
 import pygame
 
@@ -28,6 +28,8 @@ class Game():
         self.BLACK = (0, 0, 0)
         self.WHITE = (255, 255, 255)
         self.GOLD_COUNT = 0
+        self.life = 3
+        self.start_scrolling = False
         self.jump_sound = pygame.mixer.Sound('assets/sfx/jump_0.wav')
         pygame.mixer.music.load('assets/bgm/track4.ogg')
         pygame.mixer.music.play(-1)
@@ -42,7 +44,8 @@ class Game():
         self.auto_scroll = Auto(self.camera, self.player)
         self.follow_scroll = Follow(self.camera, self.player)
         self.camera.set_method(self.auto_scroll)
-        self.player.position.x = 100 
+        # self.camera.set_method(self.follow_scroll)
+        self.player.position.x = 32 
         self.player.position.y = 100
         self.background = pygame.image.load(
             'assets/background/background.png').convert()
@@ -60,8 +63,28 @@ class Game():
             if self.START_KEY:
                 self.playing = False
             
-            if self.player.rect.x + self.player.rect.w/2 <= self.camera.offset.x:
-                print('player is touching the boundary')
+            if self.player.rect.x + self.player.rect.w/2 <= self.camera.offset.x or self.player.rect.top >= self.CANVAS_H:
+                if self.life != 0:
+                    self.life -= 1
+
+                if self.life >= 1: 
+                    self.respawn()
+            
+            if self.life == 0:
+                self.playing = False
+                # self.current_menu = self.main_menu
+            
+            if self.player.position.x >= 200:
+                self.start_scrolling = True
+            
+            if self.start_scrolling:
+                if self.player.rect.x < 800:
+                    self.camera.scroll_speed = 0.8
+                if self.player.rect.x > 800:
+                    self.camera.scroll_speed = 1.0
+                if self.player.rect.x > 1600:
+                    self.camera.scroll_speed += 0.001 
+            
             
             
             # print(self.player.velocity.x)
@@ -78,8 +101,10 @@ class Game():
             for coin in self.coin_list:
                 coin.draw_coin()
             self.player.draw_player(self.canvas, self.camera)
-            self.canvas.blit(pygame.image.load('assets/coin/gold/gold_1.png'), (4, 11))
-            self.draw_text(f' x {str(self.GOLD_COUNT)}', 10, 36, 16)
+            self.canvas.blit(pygame.image.load('assets/hud/heart.png'), (4, 0))
+            self.draw_text(f' x {str(self.life)}', 10, 40, 9)
+            self.canvas.blit(pygame.image.load('assets/hud/gold.png'), (70, 4))
+            self.draw_text(f' x {str(self.GOLD_COUNT)}', 10, 100, 9)
             self.window.blit(pygame.transform.scale(
                 self.canvas, (self.WINDOW_W, self.WINDOW_H)), (0, 0))
             pygame.display.update()
@@ -148,3 +173,24 @@ class Game():
         self.DOWN_KEY = False
         self.START_KEY = False
         self.BACK_KEY = False
+
+    def respawn(self):
+        self.player = Player(self)
+        self.player.position.x = 100
+        self.player.position.y = 100
+        self.camera.reset()
+        self.start_scrolling = False
+
+    def restart_game(self):
+        self.player = Player(self)
+        self.camera = Camera(self.player)
+        self.map = TileMap(self, 'assets/maps/level_1_alpha.csv')
+        self.coin_list = self.map.coins 
+        self.auto_scroll = Auto(self.camera, self.player)
+        self.follow_scroll = Follow(self.camera, self.player)
+        self.camera.set_method(self.auto_scroll)
+        # self.camera.set_method(self.follow_scroll)
+        self.player.position.x = 32 
+        self.player.position.y = 100
+        self.life = 3
+        self.GOLD_COUNT = 0

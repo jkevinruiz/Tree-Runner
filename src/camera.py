@@ -8,6 +8,7 @@ class Camera():
         self.player = player
         self.offset = Vector2(0, 0)
         self.offset_float = Vector2(0, 0)
+        self.scroll_speed = 0
         self.DISPLAY_W = 300
         self.DISPLAY_H = 200
         self.CONST = Vector2(-self.DISPLAY_W/2 +
@@ -18,7 +19,11 @@ class Camera():
 
     def scroll(self):
         self.method.scroll()
-
+    
+    def reset(self):
+        self.offset = Vector2(0, 0)
+        self.offset_float = Vector2(0, 0)
+        self.scroll_speed = 0
 
 class CamScroll(ABC):
     def __init__(self, camera, player):
@@ -48,4 +53,6 @@ class Auto(CamScroll):
         CamScroll.__init__(self, camera, player)
 
     def scroll(self):
-        self.camera.offset.x += 1
+        if self.camera.scroll_speed > 2:
+            self.camera.scroll_speed = 2
+        self.camera.offset.x += self.camera.scroll_speed

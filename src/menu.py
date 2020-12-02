@@ -42,7 +42,7 @@ class MainMenu(Menu):
             self.game.draw_text(
                 'Tree Runner', 20, self.game.CANVAS_W / 2, self.game.CANVAS_H / 2 - 50)
             self.game.draw_text('Start Game', 20, self.startx, self.starty)
-            self.game.draw_text('Options', 20, self.optionsx, self.optionsy)
+            self.game.draw_text('Restart', 20, self.optionsx, self.optionsy)
             self.game.draw_text('Credits', 20, self.creditsx, self.creditsy)
             self.draw_cursor()
             self.blit_screen()
@@ -79,9 +79,14 @@ class MainMenu(Menu):
         self.move_cursor()
         if self.game.START_KEY:
             if self.state == 'start':
+                if self.game.life == 0:
+                    print('restarting')
+                    self.game.restart_game()
                 self.game.playing = True
             elif self.state == 'options':
-                self.game.current_menu = self.game.options_menu
+                # self.game.current_menu = self.game.options_menu
+                self.game.restart_game()
+                self.game.playing = True
             elif self.state == 'credits':
                 self.game.current_menu = self.game.credits_menu
             self.run_display = False
