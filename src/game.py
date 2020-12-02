@@ -36,6 +36,7 @@ class Game():
         self.font_name = 'assets/font/8-BIT WONDER.TTF'
         self.canvas = pygame.Surface((self.CANVAS_W, self.CANVAS_H))
         self.window = pygame.display.set_mode((self.WINDOW_W, self.WINDOW_H))
+        self.tree_location = [0, 0]
         self.clock = pygame.time.Clock()
         self.player = Player(self)
         self.camera = Camera(self.player)
@@ -45,8 +46,9 @@ class Game():
         self.follow_scroll = Follow(self.camera, self.player)
         self.camera.set_method(self.auto_scroll)
         # self.camera.set_method(self.follow_scroll)
-        self.player.position.x = 32 
+        self.player.position.x = 55 
         self.player.position.y = 100
+        self.distance = int(self.tree_location[0] - self.player.position.x)
         self.background = pygame.image.load(
             'assets/background/background.png').convert()
         self.main_menu = MainMenu(self)
@@ -88,6 +90,7 @@ class Game():
             
             
             # print(self.player.velocity.x)
+            self.update_distance()
 
             self.player.update(delta_time, self.map.tiles, self.coin_list)
             # self.player.update(delta_time, self.map.tiles)
@@ -101,12 +104,18 @@ class Game():
             for coin in self.coin_list:
                 coin.draw_coin()
             self.player.draw_player(self.canvas, self.camera)
-            self.canvas.blit(pygame.image.load('assets/hud/heart.png'), (4, 0))
+            self.canvas.blit(pygame.image.load('assets/hud/heart.png'), (8, 2))
             self.draw_text(f' x {str(self.life)}', 10, 40, 9)
             self.canvas.blit(pygame.image.load('assets/hud/gold.png'), (70, 4))
             self.draw_text(f' x {str(self.GOLD_COUNT)}', 10, 100, 9)
+            self.canvas.blit(pygame.transform.scale2x(pygame.image.load('assets/tiles/tree.png')), (self.tree_location[0] - self.camera.offset.x, self.tree_location[1] - self.camera.offset.y - 64))
+            # self.draw_text(f'DISTANCE TO GOAL'){str(self.player.position.x - self.tree_location[0])} , 10, 125  9)
+            self.canvas.blit(pygame.image.load('assets/hud/flag.png'), (128, 2))
+            self.draw_text(f' x {str(self.distance)} px', 10, 190, 9)
             self.window.blit(pygame.transform.scale(
                 self.canvas, (self.WINDOW_W, self.WINDOW_H)), (0, 0))
+                
+
             pygame.display.update()
             self.reset_keys()
 
@@ -194,3 +203,6 @@ class Game():
         self.player.position.y = 100
         self.life = 3
         self.GOLD_COUNT = 0
+    
+    def update_distance(self):
+        self.distance = int(self.tree_location[0] - self.player.position.x)

@@ -53,6 +53,6 @@ class Auto(CamScroll):
         CamScroll.__init__(self, camera, player)
 
     def scroll(self):
-        if self.camera.scroll_speed > 2:
-            self.camera.scroll_speed = 2
+        if self.camera.scroll_speed > 3:
+            self.camera.scroll_speed = 3
         self.camera.offset.x += self.camera.scroll_speed

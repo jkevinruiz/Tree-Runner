@@ -60,6 +60,9 @@ class TileMap():
                 elif tile == '3':
                     self.coins.append(
                         Coin(self.game, x * self.tile_size, y * self.tile_size))
+                elif tile == '5':
+                    self.game.tree_location = [x * self.tile_size, y * self.tile_size]
+                    # self.game.canvas.blit(pygame.image.load('assets/tiles/tree.png'), (x * self.tile_size, y * self.tile_size))
 
                 x += 1  # move to the next tile in the row
             y += 1  # move to the next row
