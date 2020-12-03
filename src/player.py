@@ -1,4 +1,7 @@
+import random
 import pygame
+
+pygame.mixer.pre_init(44100, -16, 2, 512)
 
 
 class Player():
@@ -19,17 +22,20 @@ class Player():
         self.position, self.velocity = pygame.math.Vector2(
             0, 0), pygame.math.Vector2(0, 0)
         self.acceleration = pygame.math.Vector2(0, self.gravity)
+        self.kick_sound = pygame.mixer.Sound('assets/sfx/kick.ogg')
+        self.melee_sound = pygame.mixer.Sound('assets/sfx/melee.ogg')
 
     def draw_player(self, surface, camera):
         surface.blit(pygame.transform.flip(
             self.image, self.FACING_LEFT, False), (self.rect.x - camera.offset.x, self.rect.y - camera.offset.y))
 
-    def update(self, delta_time, tiles, coins):
+    def update(self, delta_time, tiles, coins, enemies):
         self.horizontal_movement(delta_time)
         self.check_collisionsx(tiles)
         self.vertical_movement(delta_time)
         self.check_collisionsy(tiles)
         self.check_object_collisions(coins)
+        self.check_enemy_collisions(enemies)
         self.animate()
 
     def horizontal_movement(self, delta_time):
@@ -113,6 +119,16 @@ class Player():
                 tile.pickup_sound.play()
                 self.game.GOLD_COUNT += 1
                 tiles.remove(tile)
+    
+
+    def check_enemy_collisions(self, tiles):
+        collisions = self.get_hits(tiles)
+
+        for tile in collisions:
+            if tile.type == 'enemy':
+                random.choice([self.kick_sound, self.melee_sound]).play()
+                tiles.remove(tile)
+                # self.game.life -= 1
 
 
     def load_animations(self):

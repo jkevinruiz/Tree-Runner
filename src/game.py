@@ -30,7 +30,7 @@ class Game():
         self.GOLD_COUNT = 0
         self.life = 3
         self.start_scrolling = False
-        self.jump_sound = pygame.mixer.Sound('assets/sfx/jump_0.wav')
+        self.jump_sound = pygame.mixer.Sound('assets/sfx/mario_jump.ogg')
         pygame.mixer.music.load('assets/bgm/track4.ogg')
         pygame.mixer.music.play(-1)
         self.font_name = 'assets/font/8-BIT WONDER.TTF'
@@ -42,6 +42,7 @@ class Game():
         self.camera = Camera(self.player)
         self.map = TileMap(self, 'assets/maps/Level 1_group.csv')
         self.coin_list = self.map.coins 
+        self.enemy_list = self.map.enemies
         self.auto_scroll = Auto(self.camera, self.player)
         self.follow_scroll = Follow(self.camera, self.player)
         self.camera.set_method(self.auto_scroll)
@@ -84,15 +85,16 @@ class Game():
                     self.camera.scroll_speed = 0.8
                 if self.player.rect.x > 800:
                     self.camera.scroll_speed = 1.0
-                if self.player.rect.x > 1600:
-                    self.camera.scroll_speed += 0.001 
+                # if self.player.rect.x > 800:
+                #     self.camera.scroll_speed += 0.001 
             
             
             
             # print(self.player.velocity.x)
             self.update_distance()
+            print(self.camera.scroll_speed)
 
-            self.player.update(delta_time, self.map.tiles, self.coin_list)
+            self.player.update(delta_time, self.map.tiles, self.coin_list, self.enemy_list)
             # self.player.update(delta_time, self.map.tiles)
             self.camera.scroll()
             self.canvas.fill(self.BLACK)
@@ -103,6 +105,8 @@ class Game():
             # self.coin.draw_coin()
             for coin in self.coin_list:
                 coin.draw_coin()
+            for enemy in self.enemy_list:
+                enemy.draw_skeleton()
             self.player.draw_player(self.canvas, self.camera)
             self.canvas.blit(pygame.image.load('assets/hud/heart.png'), (8, 2))
             self.draw_text(f' x {str(self.life)}', 10, 40, 9)

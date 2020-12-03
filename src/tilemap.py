@@ -4,6 +4,7 @@ import os
 
 from src.tile import Tile
 from src.coin import Coin
+from src.enemy import Skeleton
 
 # TODO: animate tiles, store tiles in a separate list and draw those every couple of frames
 
@@ -16,6 +17,7 @@ class TileMap():
         self.coins = []
         self.tiles = []
         self.decors = []
+        self.enemies = []
         self.load_tiles(filename)
         self.map_surface = pygame.Surface((self.map_w, self.map_h))
         self.map_surface.set_colorkey((0, 0, 0))
@@ -60,6 +62,8 @@ class TileMap():
                 elif tile == '3':
                     self.coins.append(
                         Coin(self.game, x * self.tile_size, y * self.tile_size))
+                elif tile == '666':
+                    self.enemies.append(Skeleton(self.game, x * self.tile_size, y * self.tile_size))
                 elif tile == '5':
                     self.game.tree_location = [x * self.tile_size, y * self.tile_size]
                     # self.game.canvas.blit(pygame.image.load('assets/tiles/tree.png'), (x * self.tile_size, y * self.tile_size))
