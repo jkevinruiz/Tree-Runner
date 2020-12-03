@@ -24,6 +24,7 @@ class Player():
         self.acceleration = pygame.math.Vector2(0, self.gravity)
         self.kick_sound = pygame.mixer.Sound('assets/sfx/kick.ogg')
         self.melee_sound = pygame.mixer.Sound('assets/sfx/melee.ogg')
+        self.jump_sound = pygame.mixer.Sound('assets/sfx/mario_jump.ogg')
 
     def draw_player(self, surface, camera):
         surface.blit(pygame.transform.flip(
@@ -70,6 +71,7 @@ class Player():
 
     def jump(self):
         if self.on_ground:
+            self.jump_sound.play()
             self.isJumping = True
             self.velocity.y -= 5.5
             self.on_ground = False

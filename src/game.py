@@ -30,7 +30,7 @@ class Game():
         self.GOLD_COUNT = 0
         self.life = 3
         self.start_scrolling = False
-        self.jump_sound = pygame.mixer.Sound('assets/sfx/mario_jump.ogg')
+        # self.jump_sound = pygame.mixer.Sound('assets/sfx/mario_jump.ogg')
         pygame.mixer.music.load('assets/bgm/track4.ogg')
         pygame.mixer.music.play(-1)
         self.font_name = 'assets/font/8-BIT WONDER.TTF'
@@ -105,7 +105,10 @@ class Game():
             # self.coin.draw_coin()
             for coin in self.coin_list:
                 coin.draw_coin()
+
             for enemy in self.enemy_list:
+                if random.randint(0, 5000) == 1:
+                    enemy.state = 'idle'
                 enemy.draw_skeleton()
             
             if self.map.goal:
@@ -152,7 +155,7 @@ class Game():
                 elif event.key == K_RIGHT:
                     self.player.RIGHT_KEY, self.player.FACING_LEFT = True, False
                 elif event.key == K_SPACE:
-                    self.jump_sound.play()
+                    # self.jump_sound.play()
                     self.player.jump()
                 elif event.key == K_LSHIFT:
                     self.player.LSHIFT_KEY = True

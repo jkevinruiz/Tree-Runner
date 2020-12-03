@@ -7,7 +7,7 @@ class Skeleton():
         self.animation_database = {}
         self.animation_images = {}
         self.load_animations()
-        self.state = 'idle' 
+        self.state = 'walk' 
         self.type = 'enemy'
         self.current_frame = 0
         self.image = self.animation_images['idle_1']
@@ -16,11 +16,15 @@ class Skeleton():
         # self.rect.h = 16
         self.rect.x = x
         self.rect.y = y
+        self.velocity = 1
+        self.path = [x, x + 50]
+        self.flip = False
     
     def draw_skeleton(self):
         self.animate()
+        self.move()
         self.game.canvas.blit(
-            pygame.transform.scale(pygame.transform.flip(self.image, True, False), (self.rect.w, self.rect.h)), (self.rect.x - self.game.camera.offset.x, self.rect.y - self.game.camera.offset.y- self.rect.h / 2)
+            pygame.transform.scale(pygame.transform.flip(self.image, self.flip, False), (self.rect.w, self.rect.h)), (self.rect.x - self.game.camera.offset.x, self.rect.y - self.game.camera.offset.y- self.rect.h / 2)
         )
     
     def load_animations(self):
@@ -53,3 +57,20 @@ class Skeleton():
             self.current_frame = 0
         animation_id = self.animation_database[self.state][self.current_frame]
         self.image = self.animation_images[animation_id]
+    
+
+    def move(self):
+        if self.state != 'idle':
+            if self.velocity > 0:
+                self.flip = False
+                if self.rect.x + self.velocity < self.path[1]:
+                    self.rect.x += self.velocity
+                else: 
+                    self.velocity *= -1
+            else:
+                self.flip = True
+                if  self.rect.x - self.velocity > self.path[0]:
+                    self.rect.x += self.velocity 
+                else: 
+                    self.velocity *= -1
+
