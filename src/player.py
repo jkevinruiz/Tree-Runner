@@ -9,6 +9,7 @@ class Player():
         self.load_animations()
         self.image = self.animation_images['idle_1']
         self.rect = self.image.get_rect()
+        self.rect.h -= 4
         self.current_frame = 0
         self.state = 'idle'
         self.LEFT_KEY, self.RIGHT_KEY, self.FACING_LEFT = False, False, False

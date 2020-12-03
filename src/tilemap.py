@@ -51,10 +51,10 @@ class TileMap():
                 if tile == '0':
                     self.decors.append([pygame.image.load('assets/tiles/decor.png'),
                                        x * self.tile_size, y * self.tile_size])
-                elif tile == '1':
+                elif tile == '673':
                     self.tiles.append(Tile('assets/tiles/grass.png',
                                            x * self.tile_size, y * self.tile_size))
-                elif tile == '2':
+                elif tile == '721':
                     self.tiles.append(Tile('assets/tiles/dirt.png', x *
                                            self.tile_size, y * self.tile_size))
                 elif tile == '3':

@@ -22,7 +22,7 @@ class Game():
         self.WINDOW_W = 800
         self.WINDOW_H = 500
         self.CANVAS_W = 384
-        self.CANVAS_H = 216
+        self.CANVAS_H = 248
         self.TITLE = 'Tree Runner'
         self.TARGET_FPS = 60
         self.BLACK = (0, 0, 0)
@@ -40,7 +40,7 @@ class Game():
         self.clock = pygame.time.Clock()
         self.player = Player(self)
         self.camera = Camera(self.player)
-        self.map = TileMap(self, 'assets/maps/level_1_alpha.csv')
+        self.map = TileMap(self, 'assets/maps/Level 1_group.csv')
         self.coin_list = self.map.coins 
         self.auto_scroll = Auto(self.camera, self.player)
         self.follow_scroll = Follow(self.camera, self.player)
@@ -98,7 +98,7 @@ class Game():
             self.canvas.fill(self.BLACK)
             # self.draw_text('Thanks for Playing', 20,
             #                self.CANVAS_W/2, self.CANVAS_H/2)
-            self.canvas.blit(self.background, (0, 0 - self.camera.offset.y))
+            self.canvas.blit(pygame.transform.scale(self.background, (384, 248)), (0, 0 - self.camera.offset.y))
             self.map.draw_map(self.canvas, self.camera)
             # self.coin.draw_coin()
             for coin in self.coin_list:
