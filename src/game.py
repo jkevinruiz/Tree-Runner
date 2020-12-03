@@ -107,12 +107,16 @@ class Game():
                 coin.draw_coin()
             for enemy in self.enemy_list:
                 enemy.draw_skeleton()
+            
+            if self.map.goal:
+                self.map.goal.draw_goal()
+
             self.player.draw_player(self.canvas, self.camera)
             self.canvas.blit(pygame.image.load('assets/hud/heart.png'), (8, 2))
             self.draw_text(f' x {str(self.life)}', 10, 40, 9)
             self.canvas.blit(pygame.image.load('assets/hud/gold.png'), (70, 4))
             self.draw_text(f' x {str(self.GOLD_COUNT)}', 10, 100, 9)
-            self.canvas.blit(pygame.transform.scale2x(pygame.image.load('assets/tiles/tree.png')), (self.tree_location[0] - self.camera.offset.x, self.tree_location[1] - self.camera.offset.y - 64))
+            # self.canvas.blit(pygame.transform.scale2x(pygame.image.load('assets/tiles/tree.png')), (self.tree_location[0] - self.camera.offset.x, self.tree_location[1] - self.camera.offset.y - 64))
             # self.draw_text(f'DISTANCE TO GOAL'){str(self.player.position.x - self.tree_location[0])} , 10, 125  9)
             self.canvas.blit(pygame.image.load('assets/hud/flag.png'), (128, 2))
             self.draw_text(f' x {str(self.distance)} px', 10, 190, 9)
