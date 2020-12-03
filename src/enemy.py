@@ -20,7 +20,7 @@ class Skeleton():
     def draw_skeleton(self):
         self.animate()
         self.game.canvas.blit(
-            pygame.transform.scale(self.image, (self.rect.w, self.rect.h)), (self.rect.x - self.game.camera.offset.x, self.rect.y - self.game.camera.offset.y- self.rect.h / 2)
+            pygame.transform.scale(pygame.transform.flip(self.image, True, False), (self.rect.w, self.rect.h)), (self.rect.x - self.game.camera.offset.x, self.rect.y - self.game.camera.offset.y- self.rect.h / 2)
         )
     
     def load_animations(self):
