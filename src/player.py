@@ -44,13 +44,22 @@ class Player():
         self.image = pygame.transform.flip(self.image, self.flip, False)
         self.game.canvas.blit(self.image, (self.rect.x - self.game.camera.offset.x, self.rect.y - self.game.camera.offset.y))
 
-    def update(self, delta_time, tiles, coins, enemies):
-        self.horizontal_movement(delta_time)
-        self.check_collisions_x(tiles)
-        self.vertical_movement(delta_time)
-        self.check_collisions_y(tiles)
-        self.check_collisions_object(coins)
-        self.check_collisions_enemy(enemies)
+    # def update(self, delta_time, tiles, coins, enemies):
+    #     self.horizontal_movement(delta_time)
+    #     self.check_collisionsx(tiles)
+    #     self.vertical_movement(delta_time)
+    #     self.check_collisionsy(tiles)
+    #     self.check_object_collisions(coins)
+    #     self.check_enemy_collisions(enemies)
+    #     self.animate()
+
+    def update(self):
+        self.horizontal_movement(self.game.dt)
+        self.check_collisionsx(self.game.map.tiles)
+        self.vertical_movement(self.game.dt)
+        self.check_collisionsy(self.game.map.tiles)
+        self.check_object_collisions(self.game.map.coins)
+        self.check_enemy_collisions(self.game.map.enemies)
         self.animate()
 
     def horizontal_movement(self, delta_time):
@@ -98,7 +107,7 @@ class Player():
 
         return hits
 
-    def check_collisions_x(self, tiles):
+    def check_collisionsx(self, tiles):
         collisions = self.get_hits(tiles)
         for tile in collisions:
             if self.velocity.x > 0:
@@ -110,7 +119,7 @@ class Player():
                 self.position.x = tile.rect.right
                 self.rect.left = self.position.x
 
-    def check_collisions_y(self, tiles):
+    def check_collisionsy(self, tiles):
         self.on_ground = False
         self.rect.bottom += 1
 
@@ -127,7 +136,7 @@ class Player():
                 self.position.y = tile.rect.bottom + self.rect.h
                 self.rect.bottom = self.position.y
     
-    def check_collisions_object(self, tiles):
+    def check_object_collisions(self, tiles):
         collisions = self.get_hits(tiles)
         
         for tile in collisions:
@@ -137,7 +146,7 @@ class Player():
                 tiles.remove(tile)
     
 
-    def check_collisions_enemy(self, tiles):
+    def check_enemy_collisions(self, tiles):
         collisions = self.get_hits(tiles)
 
         for tile in collisions:
