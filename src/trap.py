@@ -28,13 +28,13 @@ class Trap():
 
     def draw(self):
         self.animate()
-        pygame.draw.rect(self.game.canvas, (255, 0, 0), self.rect, 2) 
+        # pygame.draw.rect(self.game.canvas, (255, 0, 0), self.rect, 2) 
         self.game.canvas.blit(
             self.image, (self.rect.x - self.game.camera.offset.x - 3, self.rect.y - self.game.camera.offset.y - 5))
 
     def load_animations(self):
         self.animation_database = {
-            'active': self.create_animation_list_database('assets/trap/active', [10, 10, 10, 10, 10, 10])
+            'active': self.create_animation_list_database('assets/trap/active', [30, 10, 10, 30, 10, 10])
         }
 
     def create_animation_list_database(self, path, frame_durations):
