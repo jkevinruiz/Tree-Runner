@@ -64,6 +64,9 @@ class Game():
         self.spawn_y = 100
         self.save_x = 16
         self.save_y = 100
+        self.camera_x = 0
+        self.camera_y = 0
+        self.camera_speed = 0
         self.player.position.x = self.spawn_x 
         self.player.position.y = self.spawn_y
 
@@ -135,7 +138,7 @@ class Game():
                 if self.player.rect.x < 800:
                     self.camera.scroll_speed = 0.8
                 if self.player.rect.x > 800:
-                    self.complete = True
+                    # self.complete = True
                     self.camera.scroll_speed = 1.0
                 # if self.player.rect.x > 800:
                 #     self.camera.scroll_speed += 0.001 
@@ -258,7 +261,9 @@ class Game():
         self.player = Player(self)
         self.player.position.x = self.save_x
         self.player.position.y = self.save_y
-        self.camera.reset()
+        self.camera.offset.x = self.camera_x
+        self.camera.offset_float.x = self.camera_x
+        # self.camera.reset()
         self.start_scrolling = False
 
     def reset(self):

@@ -5,8 +5,9 @@ import os
 from src.tile import Tile
 from src.coin import Coin
 from src.trap import Trap
-from src.enemy import Skeleton
 from src.goal import Goal
+from src.save import Save
+from src.enemy import Skeleton
 
 
 class TileMap():
@@ -61,6 +62,9 @@ class TileMap():
                 elif tile == '127':
                     self.tiles.append(Tile('assets/tiles/dirt.png', True,
                                            x * self.tile_size, y * self.tile_size))
+                elif tile == '666':
+                    self.enemies.append(
+                        Skeleton(self.game, x * self.tile_size, y * self.tile_size))
                 elif tile == '3':
                     self.objects.append(
                         Coin(self.game, x * self.tile_size, y * self.tile_size))
@@ -68,12 +72,11 @@ class TileMap():
                     self.objects.append(Trap(self.game, False, x * self.tile_size, y * self.tile_size))
                 elif tile == '321':
                     self.objects.append(Trap(self.game, True, x * self.tile_size, y * self.tile_size))
-                elif tile == '666':
-                    self.enemies.append(
-                        Skeleton(self.game, x * self.tile_size, y * self.tile_size))
                 elif tile == '999':
                     self.objects.append(Goal(
                         self.game, x * self.tile_size, y * self.tile_size))
+                elif tile == '888':
+                    self.objects.append(Save(self.game, x * self.tile_size, y * self.tile_size))
 
                 x += 1
             y += 1
