@@ -34,7 +34,7 @@ class TileMap():
 
     def load(self):
         for tile in self.tiles:
-            tile.draw_tile(self.map_surface)
+            tile.draw(self.map_surface)
 
     def read(self, filename):
         map = []
@@ -52,15 +52,18 @@ class TileMap():
         for row in map:
             x = 0
             for tile in row:
-                # if tile == '0':
-                #     self.decors.append([pygame.image.load('assets/tiles/decor.png'),
-                #                        x * self.tile_size, y * self.tile_size])
                 if tile == '673':
-                    self.tiles.append(Tile('assets/tiles/grass.png',
+                    self.tiles.append(Tile('assets/tiles/grass.png', False,
+                                           x * self.tile_size, y * self.tile_size))
+                elif tile == '376':
+                    self.tiles.append(Tile('assets/tiles/grass.png', True,
                                            x * self.tile_size, y * self.tile_size))
                 elif tile == '721':
-                    self.tiles.append(Tile('assets/tiles/dirt.png', x *
+                    self.tiles.append(Tile('assets/tiles/dirt.png', False, x *
                                            self.tile_size, y * self.tile_size))
+                elif tile == '127':
+                    self.tiles.append(Tile('assets/tiles/dirt.png', True,
+                                           x * self.tile_size, y * self.tile_size))
                 elif tile == '3':
                     self.coins.append(
                         Coin(self.game, x * self.tile_size, y * self.tile_size))
@@ -68,14 +71,11 @@ class TileMap():
                     self.enemies.append(
                         Skeleton(self.game, x * self.tile_size, y * self.tile_size))
                 elif tile == '999':
-                    self.goal = Goal(
+                    self.goal=Goal(
                         self.game, x * self.tile_size, y * self.tile_size)
-                elif tile == '5':
-                    self.game.tree_location = [
-                        x * self.tile_size, y * self.tile_size]
 
                 x += 1
-            y += 1 
+            y += 1
 
-        self.map_w = x * self.tile_size
-        self.map_h = y * self.tile_size
+        self.map_w=x * self.tile_size
+        self.map_h=y * self.tile_size
