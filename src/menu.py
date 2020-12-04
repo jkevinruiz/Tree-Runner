@@ -4,8 +4,8 @@ import pygame
 class Menu():
     def __init__(self, game):
         self.game = game
-        self.mid_w = self.game.CANVAS_W / 2
-        self.mid_h = self.game.CANVAS_H / 2
+        self.mid_w = self.game.canvas_w / 2
+        self.mid_h = self.game.canvas_h / 2
         self.run_display = True
         self.cursor_rect = pygame.Rect(0, 0, 20, 20)
         self.offset = -100
@@ -15,7 +15,7 @@ class Menu():
 
     def blit_screen(self):
         self.game.window.blit(pygame.transform.scale(
-            self.game.canvas, (self.game.WINDOW_W, self.game.WINDOW_H)), (0, 0))
+            self.game.canvas, (self.game.window_w, self.game.window_h)), (0, 0))
         pygame.display.update()
         self.game.reset_keys()
 
@@ -37,10 +37,10 @@ class MainMenu(Menu):
         while self.run_display:
             self.game.check_events()
             self.check_input()
-            self.game.canvas.fill(self.game.BLACK)
+            self.game.canvas.fill(self.game.black)
             # self.game.canvas.blit(self.game.background, (0, 0))
             self.game.draw_text(
-                'Tree Runner', 20, self.game.CANVAS_W / 2, self.game.CANVAS_H / 2 - 50)
+                'Tree Runner', 20, self.game.canvas_w / 2, self.game.canvas_h / 2 - 50)
             self.game.draw_text('Start Game', 20, self.startx, self.starty)
             self.game.draw_text('Restart', 20, self.optionsx, self.optionsy)
             self.game.draw_text('Credits', 20, self.creditsx, self.creditsy)
@@ -48,7 +48,7 @@ class MainMenu(Menu):
             self.blit_screen()
 
     def move_cursor(self):
-        if self.game.DOWN_KEY:
+        if self.game.down_key:
             if self.state == 'start':
                 self.cursor_rect.midtop = (
                     self.optionsx + self.offset, self.optionsy)
@@ -61,7 +61,7 @@ class MainMenu(Menu):
                 self.cursor_rect.midtop = (
                     self.startx + self.offset, self.starty)
                 self.state = 'start'
-        elif self.game.UP_KEY:
+        elif self.game.up_key:
             if self.state == 'start':
                 self.cursor_rect.midtop = (
                     self.creditsx + self.offset, self.creditsy)
@@ -77,9 +77,9 @@ class MainMenu(Menu):
 
     def check_input(self):
         self.move_cursor()
-        if self.game.START_KEY:
+        if self.game.enter_key:
             if self.state == 'start':
-                if self.game.life == 0:
+                if self.game.lives == 0:
                     print('restarting')
                     self.game.restart_game()
                 self.game.playing = True
@@ -108,19 +108,19 @@ class OptionsMenu(Menu):
             self.game.check_events()
             self.check_input()
             # self.game.canvas.blit(self.game.background, (0, 0))
-            self.game.canvas.fill(self.game.BLACK)
+            self.game.canvas.fill(self.game.black)
             self.game.draw_text(
-                'Options', 20, self.game.CANVAS_W / 2, self.game.CANVAS_H / 2 - 50)
+                'Options', 20, self.game.canvas_w / 2, self.game.canvas_h / 2 - 50)
             self.game.draw_text('Volume', 15, self.volx, self.voly)
             self.game.draw_text('Controls', 15, self.controlsx, self.controlsy)
             self.draw_cursor()
             self.blit_screen()
 
     def check_input(self):
-        if self.game.BACK_KEY:
+        if self.game.back_key:
             self.game.current_menu = self.game.main_menu
             self.run_display = False
-        elif self.game.UP_KEY or self.game.DOWN_KEY:
+        elif self.game.up_key or self.game.down_key:
             if self.state == 'volume':
                 self.state = 'controls'
                 self.cursor_rect.midtop = (
@@ -140,12 +140,12 @@ class CreditsMenu(Menu):
         self.run_display = True
         while self.run_display:
             self.game.check_events()
-            if self.game.START_KEY or self.game.BACK_KEY:
+            if self.game.START_KEY or self.game.back_key:
                 self.game.current_menu = self.game.main_menu
                 self.run_display = False
             # self.game.canvas.blit(self.game.background, (0, 0))
-            self.game.canvas.fill(self.game.BLACK)
-            self.game.draw_text('Credits', 20, self.game.CANVAS_W/2, self.game.CANVAS_H/2 - 50)
-            self.game.draw_text('christianduenas', 15, self.game.CANVAS_W/2, self.game.CANVAS_H/2 + 10)
-            self.game.draw_text('dafluffypotato', 15, self.game.CANVAS_W/2, self.game.CANVAS_H/2 + 30)
+            self.game.canvas.fill(self.game.black)
+            self.game.draw_text('Credits', 20, self.game.canvas_w/2, self.game.canvas_h/2 - 50)
+            self.game.draw_text('christianduenas', 15, self.game.canvas_w/2, self.game.canvas_h/2 + 10)
+            self.game.draw_text('dafluffypotato', 15, self.game.canvas_w/2, self.game.canvas_h/2 + 30)
             self.blit_screen()

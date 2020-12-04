@@ -23,8 +23,8 @@ class Player():
             0, 0), pygame.math.Vector2(0, 0)
         self.acceleration = pygame.math.Vector2(0, self.gravity)
         self.kick_sound = pygame.mixer.Sound('assets/sfx/kick.ogg')
-        self.melee_sound = pygame.mixer.Sound('assets/sfx/melee.ogg')
-        self.jump_sound = pygame.mixer.Sound('assets/sfx/mario_jump.ogg')
+        self.punch_sound = pygame.mixer.Sound('assets/sfx/punch.ogg')
+        self.jump_sound = pygame.mixer.Sound('assets/sfx/jump.ogg')
 
     def draw_player(self, surface, camera):
         surface.blit(pygame.transform.flip(
@@ -119,7 +119,7 @@ class Player():
         for tile in collisions:
             if tile.type == 'gold':
                 tile.pickup_sound.play()
-                self.game.GOLD_COUNT += 1
+                self.game.gold += 1
                 tiles.remove(tile)
     
 
@@ -128,9 +128,9 @@ class Player():
 
         for tile in collisions:
             if tile.type == 'enemy':
-                random.choice([self.kick_sound, self.melee_sound]).play()
+                random.choice([self.kick_sound, self.punch_sound]).play()
                 tiles.remove(tile)
-                # self.game.life -= 1
+                # self.game.lives -= 1
 
 
     def load_animations(self):

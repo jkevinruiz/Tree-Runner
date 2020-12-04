@@ -1,4 +1,3 @@
-
 import random
 import pygame
 
@@ -9,49 +8,83 @@ from src.coin import Coin
 from src.tilemap import TileMap
 from src.player import Player
 
-pygame.init()
-pygame.mixer.pre_init(44100, -16, 2, 512)
+# pygame.mixer.pre_init(44100, -16, 2, 512)
 class Game():
     def __init__(self):
-        self.running = True
-        self.playing = False
-        self.UP_KEY = False
-        self.DOWN_KEY = False
-        self.START_KEY = False
-        self.BACK_KEY = False
-        self.WINDOW_W = 800
-        self.WINDOW_H = 500
-        self.CANVAS_W = 384
-        self.CANVAS_H = 248
-        self.TITLE = 'Tree Runner'
-        self.TARGET_FPS = 60
-        self.BLACK = (0, 0, 0)
-        self.WHITE = (255, 255, 255)
-        self.GOLD_COUNT = 0
-        self.life = 3
-        self.start_scrolling = False
-        # self.jump_sound = pygame.mixer.Sound('assets/sfx/mario_jump.ogg')
+        # init
+        pygame.init()
+        pygame.mixer.init()
+        pygame.mixer.pre_init(44100, -16, 2, 512)
         pygame.mixer.music.load('assets/bgm/track4.ogg')
         pygame.mixer.music.play(-1)
+
+        # constants
+        self.black = (0, 0, 0)
+        self.white = (255, 255, 255)
+        self.window_w = 800
+        self.window_h = 500
+        self.canvas_w = 384
+        self.canvas_h = 248
+        self.target_fps = 60
+        self.dt = 1
+        self.title = 'Tree Runner'
         self.font_name = 'assets/font/8-BIT WONDER.TTF'
-        self.canvas = pygame.Surface((self.CANVAS_W, self.CANVAS_H))
-        self.window = pygame.display.set_mode((self.WINDOW_W, self.WINDOW_H))
-        self.tree_location = [0, 0]
         self.clock = pygame.time.Clock()
+        self.canvas = pygame.Surface((self.canvas_w, self.canvas_h))
+        self.window = pygame.display.set_mode((self.window_w, self.window_h))
+        self.background_image = pygame.image.load('assets/background/background.png').convert()
+        self.background = pygame.transform.scale(self.background_image, (self.canvas_w, self.canvas_h))
+
+        # state
+        self.running = True
+        self.playing = False
+        self.complete = False
+        self.pause = False
+
+        # keys
+        self.up_key = False
+        self.down_key = False
+        self.enter_key = False
+        self.back_key = False
+        self.esc_key = False
+        self.p_key = False
+
+        # hud
+        self.heart = pygame.image.load('assets/hud/heart.png')
+        self.finish = pygame.image.load('assets/hud/flag.png')
+        self.enemy = pygame.image.load('assets/hud/enemy.png')
+        self.coin = pygame.transform.scale(
+            pygame.image.load('assets/hud/gold.png'), (16, 16))
+        self.lives = 3
+        self.gold = 0
+        self.kills = 0
+        self.distance = 0
+
+        # player
         self.player = Player(self)
+        self.alive = True
+        self.spawn_x = 16
+        self.spawn_y = 100
+        self.save_x = 16
+        self.save_y = 100
+        self.player.position.x = self.spawn_x 
+        self.player.position.y = self.spawn_y
+
+        # camera
         self.camera = Camera(self.player)
-        self.map = TileMap(self, 'assets/maps/Level 1_group.csv')
-        self.coin_list = self.map.coins 
-        self.enemy_list = self.map.enemies
         self.auto_scroll = Auto(self.camera, self.player)
         self.follow_scroll = Follow(self.camera, self.player)
         self.camera.set_method(self.auto_scroll)
+        self.start_scrolling = False
+
+        # map
+        self.map = TileMap(self, 'assets/maps/Level 1_group.csv')
+
+
+
+        self.tree_location = [0, 0]
         # self.camera.set_method(self.follow_scroll)
-        self.player.position.x = 55 
-        self.player.position.y = 100
         self.distance = int(self.tree_location[0] - self.player.position.x)
-        self.background = pygame.image.load(
-            'assets/background/background.png').convert()
         self.main_menu = MainMenu(self)
         self.options_menu = OptionsMenu(self)
         self.credits_menu = CreditsMenu(self)
@@ -59,21 +92,20 @@ class Game():
 
     def game_loop(self):
         while self.playing:
-            delta_time = self.clock.tick(60) * .001 * self.TARGET_FPS
-            delta_time = min(delta_time, 3)
+            self.dt = min(self.clock.tick(60) * .001 * self.target_fps, 3)
 
             self.check_events()
-            if self.START_KEY:
+            if self.enter_key:
                 self.playing = False
             
-            if self.player.rect.x + self.player.rect.w/2 <= self.camera.offset.x or self.player.rect.top >= self.CANVAS_H:
-                if self.life != 0:
-                    self.life -= 1
+            if self.player.rect.x + self.player.rect.w/2 <= self.camera.offset.x or self.player.rect.top >= self.canvas_h:
+                if self.lives != 0:
+                    self.lives -= 1
 
-                if self.life >= 1: 
+                if self.lives >= 1: 
                     self.respawn()
             
-            if self.life == 0:
+            if self.lives == 0:
                 self.playing = False
                 # self.current_menu = self.main_menu
             
@@ -94,19 +126,19 @@ class Game():
             self.update_distance()
             print(self.camera.scroll_speed)
 
-            self.player.update(delta_time, self.map.tiles, self.coin_list, self.enemy_list)
+            self.player.update(self.dt, self.map.tiles, self.map.coins, self.map.enemies)
             # self.player.update(delta_time, self.map.tiles)
             self.camera.scroll()
-            self.canvas.fill(self.BLACK)
+            self.canvas.fill(self.black)
             # self.draw_text('Thanks for Playing', 20,
-            #                self.CANVAS_W/2, self.CANVAS_H/2)
+            #                self.canvas_w/2, self.canvas_h/2)
             self.canvas.blit(pygame.transform.scale(self.background, (384, 248)), (0, 0 - self.camera.offset.y))
             self.map.draw_map(self.canvas, self.camera)
             # self.coin.draw_coin()
-            for coin in self.coin_list:
+            for coin in self.map.coins:
                 coin.draw_coin()
 
-            for enemy in self.enemy_list:
+            for enemy in self.map.enemies:
                 if random.randint(0, 5000) == 1:
                     enemy.state = 'idle'
                 enemy.draw_skeleton()
@@ -115,16 +147,16 @@ class Game():
                 self.map.goal.draw_goal()
 
             self.player.draw_player(self.canvas, self.camera)
-            self.canvas.blit(pygame.image.load('assets/hud/heart.png'), (8, 2))
-            self.draw_text(f' x {str(self.life)}', 10, 40, 9)
-            self.canvas.blit(pygame.image.load('assets/hud/gold.png'), (70, 4))
-            self.draw_text(f' x {str(self.GOLD_COUNT)}', 10, 100, 9)
+            self.canvas.blit(self.heart, (8, 2))
+            self.draw_text(f' x {str(self.lives)}', 10, 40, 9)
+            self.canvas.blit(self.coin, (70, 2))
+            self.draw_text(f' x {str(self.gold)}', 10, 100, 9)
             # self.canvas.blit(pygame.transform.scale2x(pygame.image.load('assets/tiles/tree.png')), (self.tree_location[0] - self.camera.offset.x, self.tree_location[1] - self.camera.offset.y - 64))
             # self.draw_text(f'DISTANCE TO GOAL'){str(self.player.position.x - self.tree_location[0])} , 10, 125  9)
-            self.canvas.blit(pygame.image.load('assets/hud/flag.png'), (128, 2))
+            self.canvas.blit(self.finish, (128, 2))
             self.draw_text(f' x {str(self.distance)} px', 10, 190, 9)
             self.window.blit(pygame.transform.scale(
-                self.canvas, (self.WINDOW_W, self.WINDOW_H)), (0, 0))
+                self.canvas, (self.window_w, self.window_h)), (0, 0))
                 
 
             pygame.display.update()
@@ -141,13 +173,13 @@ class Game():
 
             if event.type == KEYDOWN:
                 if event.key == pygame.K_RETURN:
-                    self.START_KEY = True
+                    self.enter_key = True
                 if event.key == K_BACKSPACE:
-                    self.BACK_KEY = True
+                    self.back_key = True
                 if event.key == pygame.K_DOWN:
-                    self.DOWN_KEY = True
+                    self.down_key = True
                 if event.key == K_UP:
-                    self.UP_KEY = True
+                    self.up_key = True
 
                 if event.key == K_LEFT:
                     self.player.LEFT_KEY, self.player.FACING_LEFT = True, True
@@ -162,13 +194,13 @@ class Game():
 
             if event.type == KEYUP:
             #     if event.key == pygame.K_RETURN:
-            #         self.START_KEY = False
+            #         self.enter_key = False
             #     if event.key == K_BACKSPACE:
-            #         self.BACK_KEY = False
+            #         self.back_key = False
             #     if event.key == pygame.K_DOWN:
-            #         self.DOWN_KEY = False
+            #         self.down_key = False
             #     if event.key == K_UP:
-            #         self.UP_KEY = False
+            #         self.up_key = False
 
                 if event.key == K_LEFT:
                     self.player.LEFT_KEY = False
@@ -183,16 +215,16 @@ class Game():
 
     def draw_text(self, text, size, x, y):
         font = pygame.font.Font(self.font_name, size)
-        text_surface = font.render(text, True, self.WHITE)
+        text_surface = font.render(text, True, self.white)
         text_rect = text_surface.get_rect()
         text_rect.center = (x, y)
         self.canvas.blit(text_surface, text_rect)
 
     def reset_keys(self):
-        self.UP_KEY = False
-        self.DOWN_KEY = False
-        self.START_KEY = False
-        self.BACK_KEY = False
+        self.up_key = False
+        self.down_key = False
+        self.enter_key = False
+        self.back_key = False
 
     def respawn(self):
         self.player = Player(self)
@@ -212,8 +244,8 @@ class Game():
         # self.camera.set_method(self.follow_scroll)
         self.player.position.x = 32 
         self.player.position.y = 100
-        self.life = 3
-        self.GOLD_COUNT = 0
+        self.lives = 3
+        self.gold = 0
     
     def update_distance(self):
         self.distance = int(self.tree_location[0] - self.player.position.x)
