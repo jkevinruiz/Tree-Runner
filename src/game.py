@@ -157,8 +157,8 @@ class Game():
             # self.map.draw(self.canvas, self.camera)
             self.map.draw()
             # self.coin.draw_coin()
-            for coin in self.map.coins:
-                coin.draw()
+            for object in self.map.objects:
+                object.draw()
 
             for enemy in self.map.enemies:
                 if random.randint(0, 5000) == 1:
@@ -166,7 +166,7 @@ class Game():
                 enemy.draw_skeleton()
             
             # if self.map.goal:
-            #     self.map.goal.draw_goal()
+            #     self.map.goal.draw()
 
             self.player.draw_player()
             self.canvas.blit(self.heart, (8, 2))

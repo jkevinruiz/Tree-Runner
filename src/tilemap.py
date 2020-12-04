@@ -15,19 +15,15 @@ class TileMap():
         self.tile_size = 16
         self.vflip = False
 
-        self.goal = []
-        self.tiles = []
-        self.coins = []
-        self.enemies = []
+        self.tiles = [] # contains floor and ceiling tiles
+        self.objects = [] # contains goal point, coins, saved points
+        self.enemies = [] # contains enemies
 
         self.create_tiles(filename)
         self.map_surface = pygame.Surface((self.map_w, self.map_h))
         self.map_surface.set_colorkey((0, 0, 0))
         self.load()
 
-    # def draw(self, surface, camera):
-    #     surface.blit(self.map_surface,
-    #                  (0 - camera.offset.x, 0 - camera.offset.y))
     def draw(self):
         self.game.canvas.blit(
             self.map_surface, (0 - self.game.camera.offset.x, 0 - self.game.camera.offset.y))
@@ -65,7 +61,7 @@ class TileMap():
                     self.tiles.append(Tile('assets/tiles/dirt.png', True,
                                            x * self.tile_size, y * self.tile_size))
                 elif tile == '3':
-                    self.coins.append(
+                    self.objects.append(
                         Coin(self.game, x * self.tile_size, y * self.tile_size))
                 elif tile == '666':
                     self.enemies.append(

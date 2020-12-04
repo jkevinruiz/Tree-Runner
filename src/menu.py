@@ -32,7 +32,6 @@ class Menu():
 
 class MainMenu(Menu):
     def __init__(self, game):
-        # Menu.__init__(self, game)
         super().__init__(game)
         self.state = 'start'
 
@@ -124,7 +123,6 @@ class PauseScreen(Menu):
         pygame.mixer.music.play(-1)
         self.run_display = True
         while self.run_display:
-            # self.check_input()
             self.game.check_events()
 
             self.game.canvas.fill(self.game.black)
@@ -132,15 +130,8 @@ class PauseScreen(Menu):
             self.draw_text('P to continue', 10, self.middle_w, self.middle_h)
             self.draw_text('ESC to title screen', 10 , self.middle_w, self.middle_h + 30)
             self.blit_screen()
-            # print('pause screen')
         pygame.mixer.music.stop()
     
-    # def check_input(self):
-    #     if self.game.back_key:
-    #         self.run_display = False
-    #         # self.game.playing = True
-    #         # self.game.current_menu = self.game.main_menu
-
 class GameOver(Menu):
     def __init__(self, game):
         super().__init__(game)
@@ -193,11 +184,9 @@ class GameOver(Menu):
         self.move_cursor()
         if self.game.enter_key:
             if self.state == 'restart':
-                # TODO: reset the game
                 self.game.reset()
                 self.game.playing = True
             elif self.state == 'quit':
-                # TODO: exit the game
                 self.game.quit()
             self.run_display = False
 
@@ -254,70 +243,8 @@ class GameComplete(Menu):
         self.move_cursor()
         if self.game.enter_key:
             if self.state == 'restart':
-                    # TODO: reset the game
                     self.game.reset()
                     self.game.playing = True
             elif self.state == 'quit':
-                # TODO: exit the game
                 self.game.quit()
             self.run_display = False
-
-
-
-# class OptionsMenu(Menu):
-#     def __init__(self, game):
-#         Menu.__init__(self, game)
-#         self.state = 'volume'
-#         self.volx = self.middle_w
-#         self.voly = self.middle_h + 20
-#         self.controlsx = self.middle_w
-#         self.controlsy = self.middle_h + 40
-#         self.cursor_rect.midtop = (self.volx + self.offset, self.voly)
-
-#     def display_menu(self):
-#         self.run_display = True
-#         while self.run_display:
-#             self.game.check_events()
-#             self.check_input()
-#             # self.game.canvas.blit(self.game.background, (0, 0))
-#             self.game.canvas.fill(self.game.black)
-#             self.game.draw_text(
-#                 'Options', 20, self.game.canvas_w / 2, self.game.canvas_h / 2 - 50)
-#             self.game.draw_text('Volume', 15, self.volx, self.voly)
-#             self.game.draw_text('Controls', 15, self.controlsx, self.controlsy)
-#             self.draw_cursor()
-#             self.blit_screen()
-
-#     def check_input(self):
-#         if self.game.back_key:
-#             self.game.current_menu = self.game.main_menu
-#             self.run_display = False
-#         elif self.game.up_key or self.game.down_key:
-#             if self.state == 'volume':
-#                 self.state = 'controls'
-#                 self.cursor_rect.midtop = (
-#                     self.controlsx + self.offset, self.controlsy)
-#             elif self.state == 'controls':
-#                 self.state = 'volume'
-#                 self.cursor_rect.midtop = (self.volx + self.offset, self.voly)
-#         elif self.game.START_KEY:
-#             # TODO: Create a volume menu and a controls menu
-#             pass
-
-# class CreditsMenu(Menu):
-#     def __init__(self, game):
-#         Menu.__init__(self, game)
-    
-#     def display_menu(self):
-#         self.run_display = True
-#         while self.run_display:
-#             self.game.check_events()
-#             if self.game.START_KEY or self.game.back_key:
-#                 self.game.current_menu = self.game.main_menu
-#                 self.run_display = False
-#             # self.game.canvas.blit(self.game.background, (0, 0))
-#             self.game.canvas.fill(self.game.black)
-#             self.game.draw_text('Credits', 20, self.game.canvas_w/2, self.game.canvas_h/2 - 50)
-#             self.game.draw_text('christianduenas', 15, self.game.canvas_w/2, self.game.canvas_h/2 + 10)
-#             self.game.draw_text('dafluffypotato', 15, self.game.canvas_w/2, self.game.canvas_h/2 + 30)
-#             self.blit_screen()

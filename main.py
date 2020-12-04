@@ -7,3 +7,5 @@ while game.running:
 
     while game.playing:
         game.game_loop()
+    
+game.quit()

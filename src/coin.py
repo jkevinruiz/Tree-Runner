@@ -7,6 +7,7 @@ class Coin():
         pygame.mixer.pre_init(44100, -16, 2, 512)
 
         self.game = game
+        self.type = 'gold'
 
         # animation
         self.state = 'spin'
@@ -18,7 +19,6 @@ class Coin():
         # sfx
         self.loot_sound = pygame.mixer.Sound('assets/sfx/loot_coin.ogg')
 
-        # self.type = 'gold'
         self.image = self.animation_images['gold_1']
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -28,7 +28,6 @@ class Coin():
         self.animate()
         self.game.canvas.blit(
             self.image, (self.rect.x - self.game.camera.offset.x, self.rect.y - self.game.camera.offset.y))
-        # self.game.canvas.blit(self.image, (self.rect.x , self.rect.y))
 
     def load_animations(self):
         self.animation_database = {

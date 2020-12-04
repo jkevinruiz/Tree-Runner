@@ -45,15 +45,6 @@ class Player():
         self.game.canvas.blit(
             self.image, (self.rect.x - self.game.camera.offset.x, self.rect.y - self.game.camera.offset.y))
 
-    # def update(self, dt, tiles, coins, enemies):
-    #     self.horizontal_movement(dt)
-    #     self.check_collisions_x(tiles)
-    #     self.vertical_movement(dt)
-    #     self.check_collisions_y(tiles)
-    #     self.check_collisions_object(coins)
-    #     self.check_collisions_enemy(enemies)
-    #     self.animate()
-
     def update(self):
         # horizontal collisions
         self.horizontal_movement(self.game.dt)
@@ -64,7 +55,7 @@ class Player():
         self.check_collisions_y(self.game.map.tiles)
 
         # other object collisions
-        self.check_collisions_object(self.game.map.coins)
+        self.check_collisions_object(self.game.map.objects)
         self.check_collisions_enemy(self.game.map.enemies)
 
         self.animate()
@@ -148,30 +139,28 @@ class Player():
                 self.position.y = tile.rect.bottom + self.rect.h
                 self.rect.bottom = self.position.y
 
-    def check_collisions_object(self, coins):
-        collisions = self.hits(coins)
+    def check_collisions_object(self, objects):
+        collisions = self.hits(objects)
 
-        for coin in collisions:
-            # if tile.type == 'gold':
-            #     tile.pickup_sound.play()
-            #     self.game.gold += 1
-            #     tiles.remove(tile)
-            coin.loot_sound.play()
-            self.game.gold += 1
-            coins.remove(coin)
+        for object in collisions:
+            if object.type == 'gold':
+                object.loot_sound.play()
+                self.game.gold += 1
+                objects.remove(object)
+            elif object.type == 'save':
+                #TODO: set save point for player and camera position
+                pass
+            elif object.type == 'goal':
+                #TODO set complete state to true to end game
+                pass
 
     def check_collisions_enemy(self, enemies):
         collisions = self.hits(enemies)
 
         for enemy in collisions:
-            # if tile.type == 'enemy':
-            #     random.choice([self.kick_sound, self.punch_sound]).play()
-            #     self.game.kills += 1
-            #     tiles.remove(tile)
             random.choice([self.kick_sound, self.punch_sound]).play()
             self.game.kills += 1
             enemies.remove(enemy)
-            # self.game.lives -= 1
 
     def load_animations(self):
         self.animation_database = {
