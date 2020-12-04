@@ -132,7 +132,8 @@ class Game():
             # self.draw_text('Thanks for Playing', 20,
             #                self.canvas_w/2, self.canvas_h/2)
             self.canvas.blit(pygame.transform.scale(self.background, (384, 248)), (0, 0 - self.camera.offset.y))
-            self.map.draw_map(self.canvas, self.camera)
+            # self.map.draw(self.canvas, self.camera)
+            self.map.draw()
             # self.coin.draw_coin()
             for coin in self.map.coins:
                 coin.draw()
