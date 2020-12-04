@@ -40,9 +40,13 @@ class Player():
         self.rect = self.image.get_rect()
         self.rect.h -= 4
 
-    def draw_player(self, surface, camera):
-        surface.blit(pygame.transform.flip(
-            self.image, self.flip, False), (self.rect.x - camera.offset.x, self.rect.y - camera.offset.y))
+    # def draw_player(self, surface, camera):
+    #     surface.blit(pygame.transform.flip(
+    #         self.image, self.flip, False), (self.rect.x - camera.offset.x, self.rect.y - camera.offset.y))
+
+    def draw_player(self):
+        self.image = pygame.transform.flip(self.image, self.flip, False)
+        self.game.canvas.blit(self.image, (self.rect.x - self.game.camera.offset.x, self.rect.y - self.game.camera.offset.y))
 
     def update(self, delta_time, tiles, coins, enemies):
         self.horizontal_movement(delta_time)

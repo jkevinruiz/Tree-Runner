@@ -144,7 +144,7 @@ class Game():
             # if self.map.goal:
             #     self.map.goal.draw_goal()
 
-            self.player.draw_player(self.canvas, self.camera)
+            self.player.draw_player()
             self.canvas.blit(self.heart, (8, 2))
             self.draw_text(f' x {str(self.lives)}', 10, 40, 9)
             self.canvas.blit(self.coin, (70, 2))
