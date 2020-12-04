@@ -156,7 +156,7 @@ class Player():
             #     tile.pickup_sound.play()
             #     self.game.gold += 1
             #     tiles.remove(tile)
-            coin.pickup_sound.play()
+            coin.loot_sound.play()
             self.game.gold += 1
             coins.remove(coin)
 

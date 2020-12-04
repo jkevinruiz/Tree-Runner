@@ -16,7 +16,7 @@ class Coin():
         self.load_animations()
 
         # sfx
-        self.loot = pygame.mixer.Sound('assets/sfx/loot_coin.ogg')
+        self.loot_sound = pygame.mixer.Sound('assets/sfx/loot_coin.ogg')
 
         # self.type = 'gold'
         self.image = self.animation_images['gold_1']

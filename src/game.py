@@ -135,7 +135,7 @@ class Game():
             self.map.draw_map(self.canvas, self.camera)
             # self.coin.draw_coin()
             for coin in self.map.coins:
-                coin.draw_coin()
+                coin.draw()
 
             for enemy in self.map.enemies:
                 if random.randint(0, 5000) == 1:
