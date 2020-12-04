@@ -101,7 +101,7 @@ class Player():
         self.rect.bottom = self.position.y
 
     def limit_velocity(self, max_velocity):
-        # min(-max_velocity, max(self.velocity.x, max_velocity))
+        min(-max_velocity, max(self.velocity.x, max_velocity))
         if abs(self.velocity.x) < .01:
             self.velocity.x = 0
 
@@ -122,7 +122,7 @@ class Player():
 
     def check_collisions_x(self, tiles):
         collisions = self.hits(tiles)
-        
+
         for tile in collisions:
             if self.velocity.x > 0:
                 self.position.x = tile.rect.left - self.rect.w
@@ -148,23 +148,30 @@ class Player():
                 self.position.y = tile.rect.bottom + self.rect.h
                 self.rect.bottom = self.position.y
 
-    def check_collisions_object(self, tiles):
-        collisions = self.hits(tiles)
+    def check_collisions_object(self, coins):
+        collisions = self.hits(coins)
 
-        for tile in collisions:
-            if tile.type == 'gold':
-                tile.pickup_sound.play()
-                self.game.gold += 1
-                tiles.remove(tile)
+        for coin in collisions:
+            # if tile.type == 'gold':
+            #     tile.pickup_sound.play()
+            #     self.game.gold += 1
+            #     tiles.remove(tile)
+            coin.pickup_sound.play()
+            self.game.gold += 1
+            coins.remove(coin)
 
-    def check_collisions_enemy(self, tiles):
-        collisions = self.hits(tiles)
+    def check_collisions_enemy(self, enemies):
+        collisions = self.hits(enemies)
 
-        for tile in collisions:
-            if tile.type == 'enemy':
-                random.choice([self.kick_sound, self.punch_sound]).play()
-                tiles.remove(tile)
-                # self.game.lives -= 1
+        for enemy in collisions:
+            # if tile.type == 'enemy':
+            #     random.choice([self.kick_sound, self.punch_sound]).play()
+            #     self.game.kills += 1
+            #     tiles.remove(tile)
+            random.choice([self.kick_sound, self.punch_sound]).play()
+            self.game.kills += 1
+            enemies.remove(enemy)
+            # self.game.lives -= 1
 
     def load_animations(self):
         self.animation_database = {
@@ -177,12 +184,16 @@ class Player():
         name = path.split('/')[-1]
         animation_frame_data = []
         n = 1
+
         for frame in frame_durations:
             animation_frame_id = f'{name}_{str(n)}'
             image_location = f'{path}/{animation_frame_id}.png'
-            animation_image = pygame.image.load(image_location)
-            # animation_image.set_colorkey((0, 0, 0))
+
+            animation_image = pygame.image.load(image_location).convert()
+            animation_image.set_colorkey((0, 0, 0))
+
             self.animation_images[animation_frame_id] = animation_image.copy()
+
             for i in range(frame):
                 animation_frame_data.append(animation_frame_id)
             n += 1
@@ -206,5 +217,6 @@ class Player():
 
         if self.current_frame >= len(self.animation_database[self.state]):
             self.current_frame = 0
+
         animation_id = self.animation_database[self.state][self.current_frame]
         self.image = self.animation_images[animation_id]
