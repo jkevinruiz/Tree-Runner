@@ -4,11 +4,13 @@ import pygame
 class Menu():
     def __init__(self, game):
         self.game = game
-        self.mid_w = self.game.canvas_w / 2
-        self.mid_h = self.game.canvas_h / 2
+
         self.run_display = True
-        self.cursor_rect = pygame.Rect(0, 0, 20, 20)
+
         self.offset = -100
+        self.middle_w = self.game.canvas_w / 2
+        self.middle_h = self.game.canvas_h / 2
+        self.cursor_rect = pygame.Rect(0, 0, 20, 20)
 
     def draw_cursor(self):
         self.game.draw_text('*', 15, self.cursor_rect.x, self.cursor_rect.y)
@@ -24,13 +26,14 @@ class MainMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
         self.state = 'start'
-        self.startx = self.mid_w
-        self.starty = self.mid_h + 30
-        self.optionsx = self.mid_w
-        self.optionsy = self.mid_h + 50
-        self.creditsx = self.mid_w
-        self.creditsy = self.mid_h + 70
-        self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
+
+        self.start_x = self.middle_w
+        self.start_y = self.middle_h + 30
+        self.restart_x = self.middle_w
+        self.restart_y = self.middle_h + 50
+        # self.creditsx = self.middle_w
+        # self.creditsy = self.middle_h + 70
+        self.cursor_rect.midtop = (self.start_x + self.offset, self.start_y)
 
     def display_menu(self):
         self.run_display = True
@@ -41,9 +44,9 @@ class MainMenu(Menu):
             # self.game.canvas.blit(self.game.background, (0, 0))
             self.game.draw_text(
                 'Tree Runner', 20, self.game.canvas_w / 2, self.game.canvas_h / 2 - 50)
-            self.game.draw_text('Start Game', 20, self.startx, self.starty)
-            self.game.draw_text('Restart', 20, self.optionsx, self.optionsy)
-            self.game.draw_text('Credits', 20, self.creditsx, self.creditsy)
+            self.game.draw_text('Continue', 20, self.start_x, self.start_y)
+            self.game.draw_text('Restart', 20, self.restart_x, self.restart_y)
+            # self.game.draw_text('Credits', 20, self.creditsx, self.creditsy)
             self.draw_cursor()
             self.blit_screen()
 
@@ -51,29 +54,25 @@ class MainMenu(Menu):
         if self.game.down_key:
             if self.state == 'start':
                 self.cursor_rect.midtop = (
-                    self.optionsx + self.offset, self.optionsy)
-                self.state = 'options'
-            elif self.state == 'options':
+                    self.restart_x + self.offset, self.restart_y)
+                self.state = 'restart'
+            elif self.state == 'restart':
                 self.cursor_rect.midtop = (
-                    self.creditsx + self.offset, self.creditsy)
-                self.state = 'credits'
-            elif self.state == 'credits':
-                self.cursor_rect.midtop = (
-                    self.startx + self.offset, self.starty)
+                    self.start_x + self.offset, self.start_y)
                 self.state = 'start'
         elif self.game.up_key:
             if self.state == 'start':
                 self.cursor_rect.midtop = (
-                    self.creditsx + self.offset, self.creditsy)
-                self.state = 'credits'
-            elif self.state == 'options':
+                    self.restart_x + self.offset, self.restart_y)
+                self.state = 'restart'
+            elif self.state == 'restart':
                 self.cursor_rect.midtop = (
-                    self.startx + self.offset, self.starty)
+                    self.start_x + self.offset, self.start_y)
                 self.state = 'start'
-            elif self.state == 'credits':
-                self.cursor_rect.midtop = (
-                    self.optionsx + self.offset, self.optionsy)
-                self.state = 'options'
+            # elif self.state == 'credits':
+            #     self.cursor_rect.midtop = (
+            #         self.restart_x + self.offset, self.restart_y)
+            #     self.state = 'restart'
 
     def check_input(self):
         self.move_cursor()
@@ -83,7 +82,7 @@ class MainMenu(Menu):
                     print('restarting')
                     self.game.restart_game()
                 self.game.playing = True
-            elif self.state == 'options':
+            elif self.state == 'restart':
                 # self.game.current_menu = self.game.options_menu
                 self.game.restart_game()
                 self.game.playing = True
@@ -96,10 +95,10 @@ class OptionsMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
         self.state = 'volume'
-        self.volx = self.mid_w
-        self.voly = self.mid_h + 20
-        self.controlsx = self.mid_w
-        self.controlsy = self.mid_h + 40
+        self.volx = self.middle_w
+        self.voly = self.middle_h + 20
+        self.controlsx = self.middle_w
+        self.controlsy = self.middle_h + 40
         self.cursor_rect.midtop = (self.volx + self.offset, self.voly)
 
     def display_menu(self):
