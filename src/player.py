@@ -7,28 +7,42 @@ pygame.mixer.pre_init(44100, -16, 2, 512)
 class Player():
     def __init__(self, game):
         self.game = game
-        self.animation_database = {}
-        self.animation_images = {}
-        self.load_animations()
-        self.image = self.animation_images['idle_1']
-        self.rect = self.image.get_rect()
-        self.rect.h -= 4
-        self.current_frame = 0
-        self.state = 'idle'
-        self.LEFT_KEY, self.RIGHT_KEY, self.FACING_LEFT = False, False, False
-        self.LSHIFT_KEY = False
-        self.isJumping, self.on_ground = False, False
-        self.gravity, self.friction = .35, -.15
-        self.position, self.velocity = pygame.math.Vector2(
-            0, 0), pygame.math.Vector2(0, 0)
+
+        # player keys
+        self.left_key = False
+        self.right_key = False
+        self.lshift_key = False
+
+        # player movement
+        self.is_jumping = False
+        self.on_ground = False
+        self.gravity = 0.35
+        self.friction =  -0.15
+        self.position = pygame.math.Vector2(0, 0)
+        self.velocity = pygame.math.Vector2(0, 0)
         self.acceleration = pygame.math.Vector2(0, self.gravity)
+
+        # sfx
         self.kick_sound = pygame.mixer.Sound('assets/sfx/kick.ogg')
         self.punch_sound = pygame.mixer.Sound('assets/sfx/punch.ogg')
         self.jump_sound = pygame.mixer.Sound('assets/sfx/jump.ogg')
 
+        # animation
+        self.animation_database = {}
+        self.animation_images = {}
+        self.load_animations()
+        self.current_frame = 0
+        self.flip = False
+        self.state = 'idle'
+
+        # image
+        self.image = self.animation_images['idle_1']
+        self.rect = self.image.get_rect()
+        self.rect.h -= 4
+
     def draw_player(self, surface, camera):
         surface.blit(pygame.transform.flip(
-            self.image, self.FACING_LEFT, False), (self.rect.x - camera.offset.x, self.rect.y - camera.offset.y))
+            self.image, self.flip, False), (self.rect.x - camera.offset.x, self.rect.y - camera.offset.y))
 
     def update(self, delta_time, tiles, coins, enemies):
         self.horizontal_movement(delta_time)
@@ -42,11 +56,11 @@ class Player():
     def horizontal_movement(self, delta_time):
         self.acceleration.x = 0
         acceleration_speed = .2
-        if self.LSHIFT_KEY:
+        if self.lshift_key:
             acceleration_speed = .4
-        if self.LEFT_KEY:
+        if self.left_key:
             self.acceleration.x -= acceleration_speed
-        elif self.RIGHT_KEY:
+        elif self.right_key:
             self.acceleration.x += acceleration_speed
 
         self.acceleration.x += self.velocity.x * self.friction
@@ -72,7 +86,7 @@ class Player():
     def jump(self):
         if self.on_ground:
             self.jump_sound.play()
-            self.isJumping = True
+            self.is_jumping = True
             self.velocity.y -= 5.5
             self.on_ground = False
 
@@ -104,7 +118,7 @@ class Player():
         for tile in collisions:
             if self.velocity.y > 0:
                 self.on_ground = True
-                self.isJumping = False
+                self.is_jumping = False
                 self.velocity.y = 0
                 self.position.y = tile.rect.top
                 self.rect.bottom = self.position.y
@@ -168,7 +182,7 @@ class Player():
             self.change_state('run')
         if self.velocity.x == 0:
             self.change_state('idle')
-        if self.isJumping:
+        if self.is_jumping:
             self.change_state('jump')
 
         if self.current_frame >= len(self.animation_database[self.state]):

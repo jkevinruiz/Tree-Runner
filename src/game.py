@@ -4,11 +4,9 @@ import pygame
 from pygame.locals import *
 from src.menu import CreditsMenu, MainMenu, OptionsMenu
 from src.camera import Camera, Auto, Follow
-from src.coin import Coin
 from src.tilemap import TileMap
 from src.player import Player
 
-# pygame.mixer.pre_init(44100, -16, 2, 512)
 class Game():
     def __init__(self):
         # init
@@ -34,6 +32,11 @@ class Game():
         self.window = pygame.display.set_mode((self.window_w, self.window_h))
         self.background_image = pygame.image.load('assets/background/background.png').convert()
         self.background = pygame.transform.scale(self.background_image, (self.canvas_w, self.canvas_h))
+        self.heart = pygame.image.load('assets/hud/heart.png')
+        self.finish = pygame.image.load('assets/hud/flag.png')
+        self.enemy = pygame.image.load('assets/hud/enemy.png')
+        self.coin = pygame.transform.scale(
+            pygame.image.load('assets/hud/gold.png'), (16, 16))
 
         # state
         self.running = True
@@ -50,11 +53,6 @@ class Game():
         self.p_key = False
 
         # hud
-        self.heart = pygame.image.load('assets/hud/heart.png')
-        self.finish = pygame.image.load('assets/hud/flag.png')
-        self.enemy = pygame.image.load('assets/hud/enemy.png')
-        self.coin = pygame.transform.scale(
-            pygame.image.load('assets/hud/gold.png'), (16, 16))
         self.lives = 3
         self.gold = 0
         self.kills = 0
@@ -81,10 +79,10 @@ class Game():
         self.map = TileMap(self, 'assets/maps/Level 1_group.csv')
 
 
+        # self.tree_location = [0, 0]
+        # self.distance = int(self.tree_location[0] - self.player.position.x)
 
-        self.tree_location = [0, 0]
-        # self.camera.set_method(self.follow_scroll)
-        self.distance = int(self.tree_location[0] - self.player.position.x)
+        # menu
         self.main_menu = MainMenu(self)
         self.options_menu = OptionsMenu(self)
         self.credits_menu = CreditsMenu(self)
@@ -123,8 +121,8 @@ class Game():
             
             
             # print(self.player.velocity.x)
-            self.update_distance()
-            print(self.camera.scroll_speed)
+            # self.update_distance()
+            # print(self.camera.scroll_speed)
 
             self.player.update(self.dt, self.map.tiles, self.map.coins, self.map.enemies)
             # self.player.update(delta_time, self.map.tiles)
@@ -143,8 +141,8 @@ class Game():
                     enemy.state = 'idle'
                 enemy.draw_skeleton()
             
-            if self.map.goal:
-                self.map.goal.draw_goal()
+            # if self.map.goal:
+            #     self.map.goal.draw_goal()
 
             self.player.draw_player(self.canvas, self.camera)
             self.canvas.blit(self.heart, (8, 2))
@@ -182,36 +180,26 @@ class Game():
                     self.up_key = True
 
                 if event.key == K_LEFT:
-                    self.player.LEFT_KEY, self.player.FACING_LEFT = True, True
+                    self.player.left_key, self.player.flip = True, True
 
                 elif event.key == K_RIGHT:
-                    self.player.RIGHT_KEY, self.player.FACING_LEFT = True, False
+                    self.player.right_key, self.player.flip = True, False
                 elif event.key == K_SPACE:
-                    # self.jump_sound.play()
                     self.player.jump()
                 elif event.key == K_LSHIFT:
-                    self.player.LSHIFT_KEY = True
+                    self.player.lshift_key = True
 
             if event.type == KEYUP:
-            #     if event.key == pygame.K_RETURN:
-            #         self.enter_key = False
-            #     if event.key == K_BACKSPACE:
-            #         self.back_key = False
-            #     if event.key == pygame.K_DOWN:
-            #         self.down_key = False
-            #     if event.key == K_UP:
-            #         self.up_key = False
-
                 if event.key == K_LEFT:
-                    self.player.LEFT_KEY = False
+                    self.player.left_key = False
                 elif event.key == K_RIGHT:
-                    self.player.RIGHT_KEY = False
-                elif event.key == K_SPACE:
-                    if self.player.isJumping:
-                        self.player.velocity.y *= .25
-                        self.player.isJumping = False
+                    self.player.right_key = False
                 elif event.key == K_LSHIFT:
-                    self.player.LSHIFT_KEY = False
+                    self.player.lshift_key = False
+                elif event.key == K_SPACE:
+                    if self.player.is_jumping:
+                        self.player.velocity.y *= .25
+                        self.player.is_jumping = False
 
     def draw_text(self, text, size, x, y):
         font = pygame.font.Font(self.font_name, size)
@@ -247,5 +235,5 @@ class Game():
         self.lives = 3
         self.gold = 0
     
-    def update_distance(self):
-        self.distance = int(self.tree_location[0] - self.player.position.x)
+    # def update_distance(self):
+    #     self.distance = int(self.tree_location[0] - self.player.position.x)
