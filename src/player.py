@@ -17,7 +17,7 @@ class Player():
         self.is_jumping = False
         self.on_ground = False
         self.gravity = 0.35
-        self.friction =  -0.15
+        self.friction = -0.15
         self.position = pygame.math.Vector2(0, 0)
         self.velocity = pygame.math.Vector2(0, 0)
         self.acceleration = pygame.math.Vector2(0, self.gravity)
@@ -42,53 +42,66 @@ class Player():
 
     def draw_player(self):
         self.image = pygame.transform.flip(self.image, self.flip, False)
-        self.game.canvas.blit(self.image, (self.rect.x - self.game.camera.offset.x, self.rect.y - self.game.camera.offset.y))
+        self.game.canvas.blit(
+            self.image, (self.rect.x - self.game.camera.offset.x, self.rect.y - self.game.camera.offset.y))
 
-    # def update(self, delta_time, tiles, coins, enemies):
-    #     self.horizontal_movement(delta_time)
+    # def update(self, dt, tiles, coins, enemies):
+    #     self.horizontal_movement(dt)
     #     self.check_collisionsx(tiles)
-    #     self.vertical_movement(delta_time)
+    #     self.vertical_movement(dt)
     #     self.check_collisionsy(tiles)
     #     self.check_object_collisions(coins)
     #     self.check_enemy_collisions(enemies)
     #     self.animate()
 
     def update(self):
+        # horizontal collisions
         self.horizontal_movement(self.game.dt)
         self.check_collisionsx(self.game.map.tiles)
+
+        # vertical collisions
         self.vertical_movement(self.game.dt)
         self.check_collisionsy(self.game.map.tiles)
+
+        # other object collisions
         self.check_object_collisions(self.game.map.coins)
         self.check_enemy_collisions(self.game.map.enemies)
+
         self.animate()
 
-    def horizontal_movement(self, delta_time):
+    def horizontal_movement(self, dt):
         self.acceleration.x = 0
-        acceleration_speed = .2
+        acceleration_speed = 0.2
+
         if self.lshift_key:
             acceleration_speed = .4
+
         if self.left_key:
             self.acceleration.x -= acceleration_speed
         elif self.right_key:
             self.acceleration.x += acceleration_speed
 
         self.acceleration.x += self.velocity.x * self.friction
-        self.velocity.x += self.acceleration.x * delta_time
+        self.velocity.x += self.acceleration.x * dt
+
         self.limit_velocity(4)
-        self.position.x += self.velocity.x * delta_time + \
-            (self.acceleration.x * .5) * (delta_time * delta_time)
+
+        self.position.x += self.velocity.x * dt + \
+            (self.acceleration.x * .5) * (dt * dt)
         self.rect.x = self.position.x
 
-    def vertical_movement(self, delta_time):
-        self.velocity.y += self.acceleration.y * delta_time
+    def vertical_movement(self, dt):
+        self.velocity.y += self.acceleration.y * dt
+
         if self.velocity.y > 7:
             self.velocity.y = 7
-        self.position.y += self.velocity.y * delta_time + \
-            (self.acceleration.y * .5) * (delta_time * delta_time)
+
+        self.position.y += self.velocity.y * dt + \
+            (self.acceleration.y * .5) * (dt * dt)
         self.rect.bottom = self.position.y
 
     def limit_velocity(self, max_velocity):
-        min(-max_velocity, max(self.velocity.x, max_velocity))
+        # min(-max_velocity, max(self.velocity.x, max_velocity))
         if abs(self.velocity.x) < .01:
             self.velocity.x = 0
 
@@ -99,7 +112,7 @@ class Player():
             self.velocity.y -= 5.5
             self.on_ground = False
 
-    def get_hits(self, tiles):
+    def hits(self, tiles):
         hits = []
         for tile in tiles:
             if self.rect.colliderect(tile):
@@ -108,13 +121,12 @@ class Player():
         return hits
 
     def check_collisionsx(self, tiles):
-        collisions = self.get_hits(tiles)
+        collisions = self.hits(tiles)
+        
         for tile in collisions:
             if self.velocity.x > 0:
                 self.position.x = tile.rect.left - self.rect.w
                 self.rect.x = self.position.x
-                # self.position.x = tile.rect.left
-                # self.rect.right = self.position.x
             elif self.velocity.x < 0:
                 self.position.x = tile.rect.right
                 self.rect.left = self.position.x
@@ -123,7 +135,7 @@ class Player():
         self.on_ground = False
         self.rect.bottom += 1
 
-        collisions = self.get_hits(tiles)
+        collisions = self.hits(tiles)
         for tile in collisions:
             if self.velocity.y > 0:
                 self.on_ground = True
@@ -135,26 +147,24 @@ class Player():
                 self.velocity.y = 0
                 self.position.y = tile.rect.bottom + self.rect.h
                 self.rect.bottom = self.position.y
-    
+
     def check_object_collisions(self, tiles):
-        collisions = self.get_hits(tiles)
-        
+        collisions = self.hits(tiles)
+
         for tile in collisions:
             if tile.type == 'gold':
                 tile.pickup_sound.play()
                 self.game.gold += 1
                 tiles.remove(tile)
-    
 
     def check_enemy_collisions(self, tiles):
-        collisions = self.get_hits(tiles)
+        collisions = self.hits(tiles)
 
         for tile in collisions:
             if tile.type == 'enemy':
                 random.choice([self.kick_sound, self.punch_sound]).play()
                 tiles.remove(tile)
                 # self.game.lives -= 1
-
 
     def load_animations(self):
         self.animation_database = {

@@ -126,7 +126,7 @@ class Game():
 
             # self.player.update(self.dt, self.map.tiles, self.map.coins, self.map.enemies)
             self.player.update()
-            # self.player.update(delta_time, self.map.tiles)
+            # self.player.update(dt, self.map.tiles)
             self.camera.scroll()
             self.canvas.fill(self.black)
             # self.draw_text('Thanks for Playing', 20,
