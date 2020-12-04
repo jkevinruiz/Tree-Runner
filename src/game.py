@@ -1,8 +1,9 @@
+import sys
 import random
 import pygame
 
 from pygame.locals import *
-from src.menu import CreditsMenu, MainMenu, OptionsMenu
+from src.menu import MainMenu, PauseScreen, GameOver, GameComplete
 from src.camera import Camera, Auto
 from src.tilemap import TileMap
 from src.player import Player
@@ -13,8 +14,6 @@ class Game():
         pygame.init()
         pygame.mixer.init()
         pygame.mixer.pre_init(44100, -16, 2, 512)
-        pygame.mixer.music.load('assets/bgm/track4.ogg')
-        pygame.mixer.music.play(-1)
 
         # constants
         self.black = (0, 0, 0)
@@ -84,17 +83,41 @@ class Game():
 
         # menu
         self.main_menu = MainMenu(self)
-        self.options_menu = OptionsMenu(self)
-        self.credits_menu = CreditsMenu(self)
+        self.pause_screen = PauseScreen(self)
+        self.gameover_screen = GameOver(self)
+        self.gamecomplete_screen = GameComplete(self)
+        # self.options_menu = OptionsMenu(self)
+        # self.credits_menu = CreditsMenu(self)
         self.current_menu = self.main_menu
 
     def game_loop(self):
+        self.load_music()
         while self.playing:
             self.dt = min(self.clock.tick(60) * .001 * self.target_fps, 3)
 
             self.check_events()
-            if self.enter_key:
+
+            if self.pause:
+                self.pause_screen.display_menu()
+                self.pause = False
+                self.load_music()
+
+            
+            if self.lives < 1:
+                self.current_menu = self.gameover_screen
                 self.playing = False
+            
+            if self.complete:
+                self.current_menu = self.gamecomplete_screen
+                self.playing = False
+
+            # if self.enter_key:
+            #     self.playing = False
+            # elif self.p_key:
+            #     # self.current_menu.run_display = False
+            #     self.current_menu = self.pause_screen
+            #     self.current_menu.display_menu()
+            #     self.playing = False
             
             if self.player.rect.x + self.player.rect.w/2 <= self.camera.offset.x or self.player.rect.top >= self.canvas_h:
                 if self.lives != 0:
@@ -103,9 +126,7 @@ class Game():
                 if self.lives >= 1: 
                     self.respawn()
             
-            if self.lives == 0:
-                self.playing = False
-                # self.current_menu = self.main_menu
+           
             
             if self.player.position.x >= 200:
                 self.start_scrolling = True
@@ -114,6 +135,7 @@ class Game():
                 if self.player.rect.x < 800:
                     self.camera.scroll_speed = 0.8
                 if self.player.rect.x > 800:
+                    self.complete = True
                     self.camera.scroll_speed = 1.0
                 # if self.player.rect.x > 800:
                 #     self.camera.scroll_speed += 0.001 
@@ -161,6 +183,7 @@ class Game():
 
             pygame.display.update()
             self.reset_keys()
+        pygame.mixer.music.stop()    
 
     def check_events(self):
         for event in pygame.event.get():
@@ -172,6 +195,9 @@ class Game():
                 # sys.exit()
 
             if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    self.playing = False
+                    self.pause_screen.run_display = False
                 if event.key == pygame.K_RETURN:
                     self.enter_key = True
                 if event.key == K_BACKSPACE:
@@ -180,10 +206,16 @@ class Game():
                     self.down_key = True
                 if event.key == K_UP:
                     self.up_key = True
+                if event.key == K_p:
+                    if self.pause:
+                        self.pause_screen.run_display = False
+                    self.pause = True
+                if event.key == K_r:
+                    if self.lives < 1:
+                        print('restarting game')
 
                 if event.key == K_LEFT:
                     self.player.left_key, self.player.flip = True, True
-
                 elif event.key == K_RIGHT:
                     self.player.right_key, self.player.flip = True, False
                 elif event.key == K_SPACE:
@@ -209,6 +241,12 @@ class Game():
         text_rect = text_surface.get_rect()
         text_rect.center = (x, y)
         self.canvas.blit(text_surface, text_rect)
+    
+    def game_over(self):
+        if self.lives < 1:
+            self.playing = False
+            self.lives = 3
+            self.current_menu = self.gameover_screen
 
     def reset_keys(self):
         self.up_key = False
@@ -223,19 +261,68 @@ class Game():
         self.camera.reset()
         self.start_scrolling = False
 
-    def restart_game(self):
+    def reset(self):
+        # state
+        self.running = True
+        self.playing = False
+        self.complete = False
+        self.pause = False
+
+        # keys
+        self.up_key = False
+        self.down_key = False
+        self.enter_key = False
+        self.back_key = False
+        self.esc_key = False
+        self.p_key = False
+
+        # hud
+        self.lives = 3
+        self.gold = 0
+        self.kills = 0
+        self.distance = 0
+
+        # player
         self.player = Player(self)
+        self.alive = True
+        self.spawn_x = 16
+        self.spawn_y = 100
+        self.save_x = 16
+        self.save_y = 100
+        self.player.position.x = self.spawn_x 
+        self.player.position.y = self.spawn_y
+
+        # camera
         self.camera = Camera(self.player)
-        self.map = TileMap(self, 'assets/maps/level_1_alpha.csv')
-        self.coin_list = self.map.coins 
         self.auto_scroll = Auto(self.camera, self.player)
         # self.follow_scroll = Follow(self.camera, self.player)
         self.camera.set_method(self.auto_scroll)
-        # self.camera.set_method(self.follow_scroll)
-        self.player.position.x = 32 
-        self.player.position.y = 100
-        self.lives = 3
-        self.gold = 0
+        self.start_scrolling = False
+
+        # map
+        self.map = TileMap(self, 'assets/maps/Level 1_group.csv')
+
+
+        # self.tree_location = [0, 0]
+        # self.distance = int(self.tree_location[0] - self.player.position.x)
+
+        # menu
+        self.main_menu = MainMenu(self)
+        self.pause_screen = PauseScreen(self)
+        self.gameover_screen = GameOver(self)
+        # self.options_menu = OptionsMenu(self)
+        # self.credits_menu = CreditsMenu(self)
+        self.current_menu = self.main_menu
+    
+    def load_music(self):
+        pygame.mixer.music.load('assets/bgm/track4.ogg')
+        pygame.mixer.music.set_volume(0.75)
+        pygame.mixer.music.play(-1)
+    
+    def quit(self):
+        pygame.quit()
+        sys.exit()
+
     
     # def update_distance(self):
     #     self.distance = int(self.tree_location[0] - self.player.position.x)
