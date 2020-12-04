@@ -3,7 +3,7 @@ import pygame
 
 from pygame.locals import *
 from src.menu import CreditsMenu, MainMenu, OptionsMenu
-from src.camera import Camera, Auto, Follow
+from src.camera import Camera, Auto
 from src.tilemap import TileMap
 from src.player import Player
 
@@ -71,7 +71,7 @@ class Game():
         # camera
         self.camera = Camera(self.player)
         self.auto_scroll = Auto(self.camera, self.player)
-        self.follow_scroll = Follow(self.camera, self.player)
+        # self.follow_scroll = Follow(self.camera, self.player)
         self.camera.set_method(self.auto_scroll)
         self.start_scrolling = False
 
@@ -228,7 +228,7 @@ class Game():
         self.map = TileMap(self, 'assets/maps/level_1_alpha.csv')
         self.coin_list = self.map.coins 
         self.auto_scroll = Auto(self.camera, self.player)
-        self.follow_scroll = Follow(self.camera, self.player)
+        # self.follow_scroll = Follow(self.camera, self.player)
         self.camera.set_method(self.auto_scroll)
         # self.camera.set_method(self.follow_scroll)
         self.player.position.x = 32 
