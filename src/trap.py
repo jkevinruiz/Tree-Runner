@@ -1,15 +1,17 @@
 import pygame
 
+
 class Trap():
-    def __init__(self, game, x, y):
+    def __init__(self, game, vflip, x, y):
         # init
         pygame.mixer.init(44100, -16, 2, 512)
-    
+
         self.game = game
         self.type = 'trap'
+        self.vflip = vflip
 
         # animation
-           # animation
+        # animation
         self.state = 'active'
         self.current_frame = 0
         self.animation_images = {}
@@ -19,18 +21,30 @@ class Trap():
         # sfx
         self.touch_sound = pygame.mixer.Sound('assets/sfx/ouch.ogg')
 
+        # image
         self.image = self.animation_images['active_1']
+
+        # hit box
         self.rect = self.image.get_rect()
         self.rect.w = 10
         self.rect.h = 10
         self.rect.x = x + 3
         self.rect.y = y + 10
 
+        # if vertically flip
+        if self.vflip:
+            self.rect.y -= 12
+
+
     def draw(self):
         self.animate()
-        # pygame.draw.rect(self.game.canvas, (255, 0, 0), self.rect, 2) 
-        self.game.canvas.blit(
-            self.image, (self.rect.x - self.game.camera.offset.x - 3, self.rect.y - self.game.camera.offset.y - 5))
+        # pygame.draw.rect(self.game.canvas, (255, 0, 0), self.rect, 2)
+
+        if self.vflip:
+            self.game.canvas.blit(
+                pygame.transform.flip(self.image, False, self.vflip), (self.rect.x - self.game.camera.offset.x - 3, self.rect.y - self.game.camera.offset.y))
+        else:
+            self.game.canvas.blit(self.image, (self.rect.x - self.game.camera.offset.x - 3, self.rect.y - self.game.camera.offset.y - 5))
 
     def load_animations(self):
         self.animation_database = {

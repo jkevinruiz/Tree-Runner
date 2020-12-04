@@ -156,6 +156,7 @@ class Player():
                 pass
             elif object.type == 'goal':
                 #TODO set complete state to true to end game
+                print('goal reach, congrats!')
                 pass
 
     def check_collisions_enemy(self, enemies):

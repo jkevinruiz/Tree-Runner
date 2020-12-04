@@ -65,13 +65,15 @@ class TileMap():
                     self.objects.append(
                         Coin(self.game, x * self.tile_size, y * self.tile_size))
                 elif tile == '123':
-                    self.objects.append(Trap(self.game, x * self.tile_size, y * self.tile_size))
+                    self.objects.append(Trap(self.game, False, x * self.tile_size, y * self.tile_size))
+                elif tile == '321':
+                    self.objects.append(Trap(self.game, True, x * self.tile_size, y * self.tile_size))
                 elif tile == '666':
                     self.enemies.append(
                         Skeleton(self.game, x * self.tile_size, y * self.tile_size))
                 elif tile == '999':
-                    self.goal=Goal(
-                        self.game, x * self.tile_size, y * self.tile_size)
+                    self.objects.append(Goal(
+                        self.game, x * self.tile_size, y * self.tile_size))
 
                 x += 1
             y += 1
