@@ -147,6 +147,10 @@ class Player():
                 object.loot_sound.play()
                 self.game.gold += 1
                 objects.remove(object)
+            elif object.type == 'trap':
+                object.touch_sound.play()
+                self.game.lives -= 1
+                self.game.respawn()
             elif object.type == 'save':
                 #TODO: set save point for player and camera position
                 pass

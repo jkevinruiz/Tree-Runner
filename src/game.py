@@ -256,8 +256,8 @@ class Game():
 
     def respawn(self):
         self.player = Player(self)
-        self.player.position.x = 100
-        self.player.position.y = 100
+        self.player.position.x = self.save_x
+        self.player.position.y = self.save_y
         self.camera.reset()
         self.start_scrolling = False
 

@@ -4,6 +4,7 @@ import os
 
 from src.tile import Tile
 from src.coin import Coin
+from src.trap import Trap
 from src.enemy import Skeleton
 from src.goal import Goal
 
@@ -63,6 +64,8 @@ class TileMap():
                 elif tile == '3':
                     self.objects.append(
                         Coin(self.game, x * self.tile_size, y * self.tile_size))
+                elif tile == '123':
+                    self.objects.append(Trap(self.game, x * self.tile_size, y * self.tile_size))
                 elif tile == '666':
                     self.enemies.append(
                         Skeleton(self.game, x * self.tile_size, y * self.tile_size))
