@@ -21,9 +21,9 @@ class Trap():
 
         self.image = self.animation_images['active_1']
         self.rect = self.image.get_rect()
-        self.rect.w = 13
+        self.rect.w = 10
         self.rect.h = 10
-        self.rect.x = x + 2
+        self.rect.x = x + 3
         self.rect.y = y + 10
 
     def draw(self):
