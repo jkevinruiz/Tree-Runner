@@ -53,17 +53,11 @@ class MainMenu(Menu):
             self.check_input()
 
             self.game.canvas.fill(self.game.black)
-            # self.game.canvas.blit(self.game.background, (0, 0))
-            # self.game.draw_text(
-            #     'Tree Runner', 20, self.game.canvas_w / 2, self.game.canvas_h / 2 - 50)
-            # self.game.draw_text('Continue', 20, self.start_x, self.start_y)
-            # self.game.draw_text('Restart', 20, self.restart_x, self.restart_y)
             self.draw_text(
                 'Tree Runner', 20, self.game.canvas_w / 2, self.game.canvas_h / 2 - 50)
             self.draw_text('Continue', 20, self.start_x, self.start_y)
             self.draw_text('Restart', 20, self.restart_x, self.restart_y)
             self.draw_text('Quit', 20, self.quit_x, self.quit_y)
-            # self.game.draw_text('Credits', 20, self.creditsx, self.creditsy)
             self.draw_cursor()
             self.blit_screen()
         pygame.mixer.music.stop()

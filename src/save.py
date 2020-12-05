@@ -19,4 +19,4 @@ class Save():
 
     def draw(self):
         self.game.canvas.blit(
-            self.image, (self.rect.x - self.game.camera.offset.x, self.rect.y - self.game.camera.offset.y))
+            self.image, (self.rect.x - self.game.camera.offset.x, self.rect.y - self.game.camera.offset.y + 2))
