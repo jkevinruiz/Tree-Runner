@@ -32,10 +32,10 @@ class Game():
         self.background_image = pygame.image.load('assets/background/background.png').convert()
         self.background = pygame.transform.scale(self.background_image, (self.canvas_w, self.canvas_h))
         self.heart = pygame.image.load('assets/hud/heart.png')
-        self.finish = pygame.image.load('assets/hud/flag.png')
+        self.finish = pygame.image.load('assets/hud/finish.png')
         self.enemy = pygame.image.load('assets/hud/enemy.png')
         self.coin = pygame.transform.scale(
-            pygame.image.load('assets/hud/gold.png'), (16, 16))
+            pygame.image.load('assets/hud/gold.png'), (14, 14))
 
         # state
         self.running = True
@@ -97,19 +97,23 @@ class Game():
 
             self.check_events()
 
+            # show pause screen
             if self.pause:
                 self.pause_screen.display_menu()
                 self.pause = False
                 self.load_music()
             
+            # show gameover screen
             if self.lives < 1:
                 self.current_menu = self.gameover_screen
                 self.playing = False
             
+            # show gamewon screen
             if self.complete:
                 self.current_menu = self.gamecomplete_screen
                 self.playing = False
 
+            # out of bound check
             if self.player.rect.x + self.player.rect.w/2 <= self.camera.offset.x or self.player.rect.top >= self.canvas_h:
                 if self.lives != 0:
                     self.lives -= 1
@@ -117,46 +121,40 @@ class Game():
                 if self.lives >= 1: 
                     self.respawn()
             
+            # control scrolling
             if self.player.position.x >= 200:
                 self.start_scrolling = True
             elif self.player.position.x < 200:
                 self.start_scrolling = False
             
             if self.start_scrolling:
-                if self.player.rect.x < 800:
-                    self.camera.scroll_speed = 0.8
-                if self.player.rect.x > 800:
+                if self.player.rect.x < 2000:
                     self.camera.scroll_speed = 1.0
+                if self.player.rect.x > 2000:
+                    self.camera.scroll_speed = 1.25
             
             # player movement
             self.player.update()
 
             # camera movement
             self.camera.scroll()
-            # self.canvas.fill(self.black)
-            # self.canvas.blit(pygame.transform.scale(self.background, (384, 248)), (0, 0 - self.camera.offset.y))
-            # self.map.draw()
-            # for object in self.map.objects:
-            #     object.draw()
 
-            # for enemy in self.map.enemies:
-            #     if random.randint(0, 5000) == 1:
-            #         enemy.state = 'idle'
-            #     enemy.draw_skeleton()
+            # distance
+            self.update_distance()
 
-            # draw
+            # render
             self.draw()
             
 
             # self.player.draw()
-            self.canvas.blit(self.heart, (8, 2))
-            self.draw_text(f' x {str(self.lives)}', 10, 40, 9)
-            self.canvas.blit(self.coin, (70, 2))
-            self.draw_text(f' x {str(self.gold)}', 10, 100, 9)
-            self.canvas.blit(self.finish, (128, 2))
-            self.draw_text(f' x {str(self.distance)} px', 10, 190, 9)
-            self.window.blit(pygame.transform.scale(
-                self.canvas, (self.window_w, self.window_h)), (0, 0))
+            # self.canvas.blit(self.heart, (8, 2))
+            # self.draw_text(f' x {str(self.lives)}', 10, 40, 9)
+            # self.canvas.blit(self.coin, (70, 2))
+            # self.draw_text(f' x {str(self.gold)}', 10, 100, 9)
+            # self.canvas.blit(self.finish, (128, 2))
+            # self.draw_text(f' x {str(self.distance)} px', 10, 190, 9)
+            # self.window.blit(pygame.transform.scale(
+            #     self.canvas, (self.window_w, self.window_h)), (0, 0))
                 
 
             pygame.display.update()
@@ -182,9 +180,30 @@ class Game():
         # draw player
         self.player.draw()
 
+        # draw hud
+        self.draw_hud()
+
+        # draw to window
+        self.window.blit(pygame.transform.scale(
+            self.canvas, (self.window_w, self.window_h)), (0, 0))
+
 
     def draw_hud(self):
-        pass
+        # self.canvas.blit(self.heart, (8, 2))
+        # self.draw_text(f' x {str(self.lives)}', 10, 40, 9)
+        # self.canvas.blit(self.coin, (70, 2))
+        # self.draw_text(f' x {str(self.gold)}', 10, 110, 9)
+        # self.canvas.blit(self.finish, (140, 2))
+        # self.draw_text(f' x {str(self.distance)} px', 10, 190, 9)
+        self.canvas.blit(self.finish, (8, 2))
+        self.draw_text(f' x {str(self.distance)} px', 10, 67, 9)
+        self.canvas.blit(self.heart, (8, 24))
+        self.draw_text(f' x {str(self.lives)}', 10, 42, 30)
+        self.canvas.blit(self.coin, (8, 46))
+        self.draw_text(f' x {str(self.gold)}', 10, 40, 52)
+        self.canvas.blit(self.enemy, (8, 68))
+        self.draw_text(f' x {str(self.kills)}', 10, 40, 76)
+
 
     def check_events(self):
         for event in pygame.event.get():
@@ -243,6 +262,9 @@ class Game():
         text_rect.center = (x, y)
         self.canvas.blit(text_surface, text_rect)
     
+    def update_distance(self):
+        self.distance = int(self.map.goal - self.player.position.x)
+
     def game_over(self):
         if self.lives < 1:
             self.playing = False
@@ -259,8 +281,6 @@ class Game():
         self.player = Player(self)
         self.player.position.x = self.save_x
         self.player.position.y = self.save_y
-        # self.camera.offset.x = self.camera_x
-        # self.camera.offset_float.x = self.camera_x
         self.camera.reset(self.camera_speed, self.camera_x, self.camera_x)
         self.start_scrolling = False
 
@@ -328,5 +348,3 @@ class Game():
         sys.exit()
 
     
-    # def update_distance(self):
-    #     self.distance = int(self.tree_location[0] - self.player.position.x)
