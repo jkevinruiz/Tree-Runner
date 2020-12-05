@@ -20,6 +20,7 @@ class TileMap():
         self.tiles = [] # contains floor and ceiling tiles
         self.objects = [] # contains goal point, coins, saved points
         self.enemies = [] # contains enemies
+        self.goal = 6000
 
         self.create_tiles(filename)
         self.map_surface = pygame.Surface((self.map_w, self.map_h))
@@ -73,6 +74,7 @@ class TileMap():
                 elif tile == '321':
                     self.objects.append(Trap(self.game, True, x * self.tile_size, y * self.tile_size))
                 elif tile == '999':
+                    self.goal = x * self.tile_size
                     self.objects.append(Goal(
                         self.game, x * self.tile_size, y * self.tile_size))
                 elif tile == '888':

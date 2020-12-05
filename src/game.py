@@ -60,37 +60,34 @@ class Game():
         # player
         self.player = Player(self)
         self.alive = True
+        
+        # player spawn location
         self.spawn_x = 16
         self.spawn_y = 100
+        self.player.position.x = self.spawn_x 
+        self.player.position.y = self.spawn_y
+
+        # save location
         self.save_x = 16
         self.save_y = 100
         self.camera_x = 0
         self.camera_y = 0
         self.camera_speed = 0
-        self.player.position.x = self.spawn_x 
-        self.player.position.y = self.spawn_y
 
         # camera
         self.camera = Camera(self.player)
         self.auto_scroll = Auto(self.camera, self.player)
-        # self.follow_scroll = Follow(self.camera, self.player)
         self.camera.set_method(self.auto_scroll)
         self.start_scrolling = False
 
         # map
         self.map = TileMap(self, 'assets/maps/Level 1_group.csv')
 
-
-        # self.tree_location = [0, 0]
-        # self.distance = int(self.tree_location[0] - self.player.position.x)
-
         # menu
         self.main_menu = MainMenu(self)
         self.pause_screen = PauseScreen(self)
         self.gameover_screen = GameOver(self)
         self.gamecomplete_screen = GameComplete(self)
-        # self.options_menu = OptionsMenu(self)
-        # self.credits_menu = CreditsMenu(self)
         self.current_menu = self.main_menu
 
     def game_loop(self):
@@ -104,7 +101,6 @@ class Game():
                 self.pause_screen.display_menu()
                 self.pause = False
                 self.load_music()
-
             
             if self.lives < 1:
                 self.current_menu = self.gameover_screen
@@ -114,14 +110,6 @@ class Game():
                 self.current_menu = self.gamecomplete_screen
                 self.playing = False
 
-            # if self.enter_key:
-            #     self.playing = False
-            # elif self.p_key:
-            #     # self.current_menu.run_display = False
-            #     self.current_menu = self.pause_screen
-            #     self.current_menu.display_menu()
-            #     self.playing = False
-            
             if self.player.rect.x + self.player.rect.w/2 <= self.camera.offset.x or self.player.rect.top >= self.canvas_h:
                 if self.lives != 0:
                     self.lives -= 1
@@ -133,6 +121,8 @@ class Game():
             
             if self.player.position.x >= 200:
                 self.start_scrolling = True
+            elif self.player.position.x < 200:
+                self.start_scrolling = False
             
             if self.start_scrolling:
                 if self.player.rect.x < 800:
@@ -261,9 +251,9 @@ class Game():
         self.player = Player(self)
         self.player.position.x = self.save_x
         self.player.position.y = self.save_y
-        self.camera.offset.x = self.camera_x
-        self.camera.offset_float.x = self.camera_x
-        # self.camera.reset()
+        # self.camera.offset.x = self.camera_x
+        # self.camera.offset_float.x = self.camera_x
+        self.camera.reset(self.camera_speed, self.camera_x, self.camera_x)
         self.start_scrolling = False
 
     def reset(self):
@@ -290,33 +280,34 @@ class Game():
         # player
         self.player = Player(self)
         self.alive = True
+        
+        # player spawn location
         self.spawn_x = 16
         self.spawn_y = 100
-        self.save_x = 16
-        self.save_y = 100
         self.player.position.x = self.spawn_x 
         self.player.position.y = self.spawn_y
+
+        # save location
+        self.save_x = 16
+        self.save_y = 100
+        self.camera_x = 0
+        self.camera_y = 0
+        self.camera_speed = 0
 
         # camera
         self.camera = Camera(self.player)
         self.auto_scroll = Auto(self.camera, self.player)
-        # self.follow_scroll = Follow(self.camera, self.player)
         self.camera.set_method(self.auto_scroll)
         self.start_scrolling = False
 
         # map
         self.map = TileMap(self, 'assets/maps/Level 1_group.csv')
 
-
-        # self.tree_location = [0, 0]
-        # self.distance = int(self.tree_location[0] - self.player.position.x)
-
         # menu
         self.main_menu = MainMenu(self)
         self.pause_screen = PauseScreen(self)
         self.gameover_screen = GameOver(self)
-        # self.options_menu = OptionsMenu(self)
-        # self.credits_menu = CreditsMenu(self)
+        self.gamecomplete_screen = GameComplete(self)
         self.current_menu = self.main_menu
     
     def load_music(self):

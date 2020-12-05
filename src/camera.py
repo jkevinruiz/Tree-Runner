@@ -16,10 +16,10 @@ class Camera():
     def scroll(self):
         self.method.scroll()
     
-    def reset(self):
-        self.scroll_speed = 0
-        self.offset = Vector2(0, 0)
-        self.offset_float = Vector2(0, 0)
+    def reset(self, speed, offset, float):
+        self.scroll_speed = speed
+        self.offset = Vector2(offset, 0)
+        self.offset_float = Vector2(float, 0)
 
 class CamScroll(ABC):
     def __init__(self, camera, player):
