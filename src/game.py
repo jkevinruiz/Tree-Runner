@@ -117,8 +117,6 @@ class Game():
                 if self.lives >= 1: 
                     self.respawn()
             
-           
-            
             if self.player.position.x >= 200:
                 self.start_scrolling = True
             elif self.player.position.x < 200:
@@ -128,46 +126,33 @@ class Game():
                 if self.player.rect.x < 800:
                     self.camera.scroll_speed = 0.8
                 if self.player.rect.x > 800:
-                    # self.complete = True
                     self.camera.scroll_speed = 1.0
-                # if self.player.rect.x > 800:
-                #     self.camera.scroll_speed += 0.001 
             
-            
-            
-            # print(self.player.velocity.x)
-            # self.update_distance()
-            # print(self.camera.scroll_speed)
-
-            # self.player.update(self.dt, self.map.tiles, self.map.coins, self.map.enemies)
+            # player movement
             self.player.update()
-            # self.player.update(dt, self.map.tiles)
+
+            # camera movement
             self.camera.scroll()
-            self.canvas.fill(self.black)
-            # self.draw_text('Thanks for Playing', 20,
-            #                self.canvas_w/2, self.canvas_h/2)
-            self.canvas.blit(pygame.transform.scale(self.background, (384, 248)), (0, 0 - self.camera.offset.y))
-            # self.map.draw(self.canvas, self.camera)
-            self.map.draw()
-            # self.coin.draw_coin()
-            for object in self.map.objects:
-                object.draw()
+            # self.canvas.fill(self.black)
+            # self.canvas.blit(pygame.transform.scale(self.background, (384, 248)), (0, 0 - self.camera.offset.y))
+            # self.map.draw()
+            # for object in self.map.objects:
+            #     object.draw()
 
-            for enemy in self.map.enemies:
-                if random.randint(0, 5000) == 1:
-                    enemy.state = 'idle'
-                enemy.draw_skeleton()
+            # for enemy in self.map.enemies:
+            #     if random.randint(0, 5000) == 1:
+            #         enemy.state = 'idle'
+            #     enemy.draw_skeleton()
+
+            # draw
+            self.draw()
             
-            # if self.map.goal:
-            #     self.map.goal.draw()
 
-            self.player.draw_player()
+            # self.player.draw()
             self.canvas.blit(self.heart, (8, 2))
             self.draw_text(f' x {str(self.lives)}', 10, 40, 9)
             self.canvas.blit(self.coin, (70, 2))
             self.draw_text(f' x {str(self.gold)}', 10, 100, 9)
-            # self.canvas.blit(pygame.transform.scale2x(pygame.image.load('assets/tiles/tree.png')), (self.tree_location[0] - self.camera.offset.x, self.tree_location[1] - self.camera.offset.y - 64))
-            # self.draw_text(f'DISTANCE TO GOAL'){str(self.player.position.x - self.tree_location[0])} , 10, 125  9)
             self.canvas.blit(self.finish, (128, 2))
             self.draw_text(f' x {str(self.distance)} px', 10, 190, 9)
             self.window.blit(pygame.transform.scale(
@@ -177,6 +162,29 @@ class Game():
             pygame.display.update()
             self.reset_keys()
         pygame.mixer.music.stop()    
+    
+    def draw(self):
+        # clear screen
+        self.canvas.fill(self.black)
+        # draw background
+        self.canvas.blit(pygame.transform.scale(self.background, (self.canvas_w, self.canvas_h)), (0, 0))
+        # draw floor and ceiling
+        self.map.draw()
+        # draw objects like coins, traps, save points, and goal
+        for object in self.map.objects:
+            object.draw()
+        # draw enemies like skeleton
+        for enemy in self.map.enemies:
+            # set state idle or walking
+            if random.randint(0, 999) == 19:
+                enemy.state = 'idle'
+            enemy.draw_skeleton()
+        # draw player
+        self.player.draw()
+
+
+    def draw_hud(self):
+        pass
 
     def check_events(self):
         for event in pygame.event.get():

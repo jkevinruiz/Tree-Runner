@@ -40,7 +40,7 @@ class Player():
         self.rect = self.image.get_rect()
         self.rect.h -= 4
 
-    def draw_player(self):
+    def draw(self):
         self.image = pygame.transform.flip(self.image, self.flip, False)
         self.game.canvas.blit(
             self.image, (self.rect.x - self.game.camera.offset.x, self.rect.y - self.game.camera.offset.y))
