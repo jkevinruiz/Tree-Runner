@@ -11,7 +11,6 @@ class Trap():
         self.vflip = vflip
 
         # animation
-        # animation
         self.state = 'active'
         self.current_frame = 0
         self.animation_images = {}
@@ -38,7 +37,6 @@ class Trap():
 
     def draw(self):
         self.animate()
-        # pygame.draw.rect(self.game.canvas, (255, 0, 0), self.rect, 2)
 
         if self.vflip:
             self.game.canvas.blit(

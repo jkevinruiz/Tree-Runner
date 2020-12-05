@@ -152,17 +152,13 @@ class Player():
                 self.game.lives -= 1
                 self.game.respawn()
             elif object.type == 'save':
-                #TODO: set save point for player and camera position
                 self.game.save_x = object.rect.x
                 self.game.save_y = object.rect.y
                 self.game.camera_x = object.rect.x - 200
                 self.game.camera_y = 0
                 self.camera_speed = self.game.camera.scroll_speed
             elif object.type == 'goal':
-                #TODO set complete state to true to end game
-                print('goal reach, congrats!')
                 self.game.complete = True
-                # pass
 
     def check_collisions_enemy(self, enemies):
         collisions = self.hits(enemies)

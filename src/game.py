@@ -144,18 +144,6 @@ class Game():
 
             # render
             self.draw()
-            
-
-            # self.player.draw()
-            # self.canvas.blit(self.heart, (8, 2))
-            # self.draw_text(f' x {str(self.lives)}', 10, 40, 9)
-            # self.canvas.blit(self.coin, (70, 2))
-            # self.draw_text(f' x {str(self.gold)}', 10, 100, 9)
-            # self.canvas.blit(self.finish, (128, 2))
-            # self.draw_text(f' x {str(self.distance)} px', 10, 190, 9)
-            # self.window.blit(pygame.transform.scale(
-            #     self.canvas, (self.window_w, self.window_h)), (0, 0))
-                
 
             pygame.display.update()
             self.reset_keys()
@@ -189,12 +177,6 @@ class Game():
 
 
     def draw_hud(self):
-        # self.canvas.blit(self.heart, (8, 2))
-        # self.draw_text(f' x {str(self.lives)}', 10, 40, 9)
-        # self.canvas.blit(self.coin, (70, 2))
-        # self.draw_text(f' x {str(self.gold)}', 10, 110, 9)
-        # self.canvas.blit(self.finish, (140, 2))
-        # self.draw_text(f' x {str(self.distance)} px', 10, 190, 9)
         self.canvas.blit(self.finish, (8, 2))
         self.draw_text(f' x {str(self.distance)} px', 10, 67, 9)
         self.canvas.blit(self.heart, (8, 24))
@@ -211,8 +193,6 @@ class Game():
                 self.running = False
                 self.playing = False
                 self.current_menu.run_display = False
-                # pygame.quit()
-                # sys.exit()
 
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
@@ -230,9 +210,6 @@ class Game():
                     if self.pause:
                         self.pause_screen.run_display = False
                     self.pause = True
-                if event.key == K_r:
-                    if self.lives < 1:
-                        print('restarting game')
 
                 if event.key == K_LEFT:
                     self.player.left_key, self.player.flip = True, True
