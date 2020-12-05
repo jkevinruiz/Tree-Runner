@@ -152,6 +152,7 @@ class Player():
                 self.game.lives -= 1
                 self.game.respawn()
             elif object.type == 'save':
+                object.save_sound.play()
                 self.game.save_x = object.rect.x
                 self.game.save_y = object.rect.y
                 self.game.camera_x = object.rect.x - 200
