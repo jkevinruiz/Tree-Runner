@@ -13,7 +13,7 @@ A 2D side-scroller game built in the pygame library.
 **Audience** : Casual Gamers and Platformer Enthusiast 
 
 ## Synopsis
-You have been on a quest to find the young Yggdrasil. The long lost seedling of the world tree. Your journey takes you to the forests of ***Midgard*** where ***ancient monsters*** abound. Not to worry you've grown stronger and can defeat any foe you come face to face with in a single hit. But it seems there are still things that you should be afraid of. Be cautios of the round you travel. In the ground and the ceiling ***traps*** lay aplenty, and as you travel through the forest the ***terrain*** is treacherous and require extreme concentration and attention. As you travel the forest you come accross ***wooden plates*** that allows you to travel back to that location. These are valuable plates that you should make use of to ease your journey. Along with danger comes an abundance of treasured ***coins***, according to stories collecting a ***100*** of them grants longevity. With that in mind always remember to ***move forward*** do not look back or you'll be sorry.
+You have been on a quest to find the young Yggdrasil. The young world tree. Your journey takes you to the forests of ***Midgard*** where ***ancient monsters*** abound. Not to worry you've grown stronger and can defeat any foe you come face to face with in a single hit. But it seems there are still things that you should be afraid of. Be cautious of the ground you travel, ***traps*** lay aplenty. As you travel through the forest the ***terrain*** is treacherous and require extreme concentration and attention. As you travel the forest you come accross ***wooden plates*** that allows you to travel back to that location. These are valuable plates that you should make use of to ease your journey. Along with danger comes an abundance of treasured ***coins***, according to stories collecting a ***100*** of them grants longevity. With that in mind always remember to ***move forward*** do not look back or you'll be sorry.
 
 ## Goals
 - Safely pass through the forest of ***Midgard*** and reach the young world tree Yggdrasil
@@ -26,9 +26,13 @@ You have been on a quest to find the young Yggdrasil. The long lost seedling of 
 - ***Collect 100 Coins*** to receive an additional life
 - ***Woooden Plates*** allow you to saved your current location when you die you respawn at that location
 - ***Boundaries*** if the left boundary catches up to you your dead, if you fall down cliffs your dead
+## Game Keys
+- ***ESC*** takes you back to the main screen
+- ***P*** pauses the game
 
 ## Uniqueness
 - Tree Runner is a visually stunning and appealing game with simple mechanics and gameplay
 - The background music and sfx compliment the theme and environment of the game
 - The map is designed to challenge gamers and appeal to their stubborn streak
 - The moving left boundary creates a sense of urgency for the player often resulting in them panicking and making more mistakes than they should
+
