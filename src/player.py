@@ -146,6 +146,7 @@ class Player():
             if object.type == 'gold':
                 object.loot_sound.play()
                 self.game.gold += 1
+                self.game.bonus_life += 1
                 objects.remove(object)
             elif object.type == 'trap':
                 object.touch_sound.play()

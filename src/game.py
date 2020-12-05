@@ -37,61 +37,11 @@ class Game():
         self.enemy = pygame.image.load('assets/hud/enemy.png')
         self.coin = pygame.transform.scale(
             pygame.image.load('assets/hud/gold.png'), (14, 14))
+        self.oneup_sound = pygame.mixer.Sound('assets/sfx/1-up.ogg')
 
         # create game properties
         self.reset()
-        # # state
-        # self.running = True
-        # self.playing = False
-        # self.complete = False
-        # self.pause = False
 
-        # # keys
-        # self.up_key = False
-        # self.down_key = False
-        # self.enter_key = False
-        # self.back_key = False
-        # self.esc_key = False
-        # self.p_key = False
-
-        # # hud
-        # self.lives = 10
-        # self.gold = 0
-        # self.kills = 0
-        # self.distance = 0
-
-        # # player
-        # self.player = Player(self)
-        # self.alive = True
-        
-        # # player spawn location
-        # self.spawn_x = 16
-        # self.spawn_y = 100
-        # self.player.position.x = self.spawn_x 
-        # self.player.position.y = self.spawn_y
-
-        # # save location
-        # self.save_x = 16
-        # self.save_y = 100
-        # self.camera_x = 0
-        # self.camera_y = 0
-        # self.camera_speed = 0
-
-        # # camera
-        # self.camera = Camera(self.player)
-        # self.auto_scroll = Auto(self.camera, self.player)
-        # self.camera.set_method(self.auto_scroll)
-        # self.start_scrolling = False
-
-        # # map
-        # self.map = TileMap(self, 'assets/maps/level 1.csv')
-
-        # # menu
-        # self.main_menu = MainMenu(self)
-        # self.pause_screen = PauseScreen(self)
-        # self.gameover_screen = GameOver(self)
-        # self.gamecomplete_screen = GameComplete(self)
-        # self.current_menu = self.main_menu
 
     def game_loop(self):
         self.load_music()
@@ -123,6 +73,11 @@ class Game():
 
                 if self.lives >= 1: 
                     self.respawn()
+            
+            if self.bonus_life == 100:
+                self.oneup_sound.play()
+                self.lives += 1
+                self.bonus_life = 0
             
             # control scrolling
             if self.player.position.x >= 200:
@@ -183,11 +138,11 @@ class Game():
         self.canvas.blit(self.finish, (8, 2))
         self.draw_text(f' x {str(self.distance)} px', 10, 67, 9)
         self.canvas.blit(self.heart, (8, 24))
-        self.draw_text(f' x {str(self.lives)}', 10, 42, 30)
+        self.draw_text(f' x {str(self.lives - 1)}', 10, 40, 30)
         self.canvas.blit(self.coin, (8, 46))
-        self.draw_text(f' x {str(self.gold)}', 10, 40, 52)
+        self.draw_text(f' x {str(self.gold)}', 10, 45, 52)
         self.canvas.blit(self.enemy, (8, 68))
-        self.draw_text(f' x {str(self.kills)}', 10, 40, 76)
+        self.draw_text(f' x {str(self.kills)}', 10, 45, 76)
 
 
     def check_events(self):
@@ -280,7 +235,8 @@ class Game():
         self.p_key = False
 
         # hud
-        self.lives = 10
+        self.lives = 4
+        self.bonus_life = 0
         self.gold = 0
         self.kills = 0
         self.distance = 0
