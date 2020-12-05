@@ -15,6 +15,7 @@ class Game():
         pygame.mixer.init()
         pygame.mixer.pre_init(44100, -16, 2, 512)
 
+
         # constants
         self.black = (0, 0, 0)
         self.white = (255, 255, 255)
@@ -37,58 +38,60 @@ class Game():
         self.coin = pygame.transform.scale(
             pygame.image.load('assets/hud/gold.png'), (14, 14))
 
-        # state
-        self.running = True
-        self.playing = False
-        self.complete = False
-        self.pause = False
+        # create game properties
+        self.reset()
+        # # state
+        # self.running = True
+        # self.playing = False
+        # self.complete = False
+        # self.pause = False
 
-        # keys
-        self.up_key = False
-        self.down_key = False
-        self.enter_key = False
-        self.back_key = False
-        self.esc_key = False
-        self.p_key = False
+        # # keys
+        # self.up_key = False
+        # self.down_key = False
+        # self.enter_key = False
+        # self.back_key = False
+        # self.esc_key = False
+        # self.p_key = False
 
-        # hud
-        self.lives = 10
-        self.gold = 0
-        self.kills = 0
-        self.distance = 0
+        # # hud
+        # self.lives = 10
+        # self.gold = 0
+        # self.kills = 0
+        # self.distance = 0
 
-        # player
-        self.player = Player(self)
-        self.alive = True
+        # # player
+        # self.player = Player(self)
+        # self.alive = True
         
-        # player spawn location
-        self.spawn_x = 16
-        self.spawn_y = 100
-        self.player.position.x = self.spawn_x 
-        self.player.position.y = self.spawn_y
+        # # player spawn location
+        # self.spawn_x = 16
+        # self.spawn_y = 100
+        # self.player.position.x = self.spawn_x 
+        # self.player.position.y = self.spawn_y
 
-        # save location
-        self.save_x = 16
-        self.save_y = 100
-        self.camera_x = 0
-        self.camera_y = 0
-        self.camera_speed = 0
+        # # save location
+        # self.save_x = 16
+        # self.save_y = 100
+        # self.camera_x = 0
+        # self.camera_y = 0
+        # self.camera_speed = 0
 
-        # camera
-        self.camera = Camera(self.player)
-        self.auto_scroll = Auto(self.camera, self.player)
-        self.camera.set_method(self.auto_scroll)
-        self.start_scrolling = False
+        # # camera
+        # self.camera = Camera(self.player)
+        # self.auto_scroll = Auto(self.camera, self.player)
+        # self.camera.set_method(self.auto_scroll)
+        # self.start_scrolling = False
 
-        # map
-        self.map = TileMap(self, 'assets/maps/level 1.csv')
+        # # map
+        # self.map = TileMap(self, 'assets/maps/level 1.csv')
 
-        # menu
-        self.main_menu = MainMenu(self)
-        self.pause_screen = PauseScreen(self)
-        self.gameover_screen = GameOver(self)
-        self.gamecomplete_screen = GameComplete(self)
-        self.current_menu = self.main_menu
+        # # menu
+        # self.main_menu = MainMenu(self)
+        # self.pause_screen = PauseScreen(self)
+        # self.gameover_screen = GameOver(self)
+        # self.gamecomplete_screen = GameComplete(self)
+        # self.current_menu = self.main_menu
 
     def game_loop(self):
         self.load_music()
