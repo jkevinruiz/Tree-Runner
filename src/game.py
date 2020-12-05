@@ -52,7 +52,7 @@ class Game():
         self.p_key = False
 
         # hud
-        self.lives = 3
+        self.lives = 10
         self.gold = 0
         self.kills = 0
         self.distance = 0
@@ -81,7 +81,7 @@ class Game():
         self.start_scrolling = False
 
         # map
-        self.map = TileMap(self, 'assets/maps/Level 1_group.csv')
+        self.map = TileMap(self, 'assets/maps/level 1.csv')
 
         # menu
         self.main_menu = MainMenu(self)
@@ -238,7 +238,7 @@ class Game():
     def game_over(self):
         if self.lives < 1:
             self.playing = False
-            self.lives = 3
+            self.lives = 10
             self.current_menu = self.gameover_screen
 
     def reset_keys(self):
@@ -272,7 +272,7 @@ class Game():
         self.p_key = False
 
         # hud
-        self.lives = 3
+        self.lives = 10
         self.gold = 0
         self.kills = 0
         self.distance = 0
@@ -301,7 +301,7 @@ class Game():
         self.start_scrolling = False
 
         # map
-        self.map = TileMap(self, 'assets/maps/Level 1_group.csv')
+        self.map = TileMap(self, 'assets/maps/level 1.csv')
 
         # menu
         self.main_menu = MainMenu(self)

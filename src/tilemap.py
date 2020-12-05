@@ -54,30 +54,30 @@ class TileMap():
                 if tile == '673':
                     self.tiles.append(Tile('assets/tiles/grass.png', False,
                                            x * self.tile_size, y * self.tile_size))
-                elif tile == '376':
+                elif tile == '674':
                     self.tiles.append(Tile('assets/tiles/grass.png', True,
                                            x * self.tile_size, y * self.tile_size))
                 elif tile == '721':
                     self.tiles.append(Tile('assets/tiles/dirt.png', False, x *
                                            self.tile_size, y * self.tile_size))
-                elif tile == '127':
+                elif tile == '722':
                     self.tiles.append(Tile('assets/tiles/dirt.png', True,
                                            x * self.tile_size, y * self.tile_size))
-                elif tile == '666':
+                elif tile == '702':
                     self.enemies.append(
                         Skeleton(self.game, x * self.tile_size, y * self.tile_size))
-                elif tile == '3':
+                elif tile == '900':
                     self.objects.append(
                         Coin(self.game, x * self.tile_size, y * self.tile_size))
-                elif tile == '123':
+                elif tile == '895':
                     self.objects.append(Trap(self.game, False, x * self.tile_size, y * self.tile_size))
-                elif tile == '321':
+                elif tile == '847':
                     self.objects.append(Trap(self.game, True, x * self.tile_size, y * self.tile_size))
-                elif tile == '999':
+                elif tile == '937':
                     self.goal = x * self.tile_size
                     self.objects.append(Goal(
                         self.game, x * self.tile_size, y * self.tile_size))
-                elif tile == '888':
+                elif tile == '558':
                     self.objects.append(Save(self.game, x * self.tile_size, y * self.tile_size))
 
                 x += 1

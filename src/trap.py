@@ -26,9 +26,9 @@ class Trap():
 
         # hit box
         self.rect = self.image.get_rect()
-        self.rect.w = 10
-        self.rect.h = 10
-        self.rect.x = x + 3
+        self.rect.w = 8
+        self.rect.h = 8
+        self.rect.x = x + 4
         self.rect.y = y + 10
 
         # if vertically flip
@@ -44,7 +44,7 @@ class Trap():
             self.game.canvas.blit(
                 pygame.transform.flip(self.image, False, self.vflip), (self.rect.x - self.game.camera.offset.x - 3, self.rect.y - self.game.camera.offset.y))
         else:
-            self.game.canvas.blit(self.image, (self.rect.x - self.game.camera.offset.x - 3, self.rect.y - self.game.camera.offset.y - 5))
+            self.game.canvas.blit(self.image, (self.rect.x - self.game.camera.offset.x - 4, self.rect.y - self.game.camera.offset.y - 5))
 
     def load_animations(self):
         self.animation_database = {

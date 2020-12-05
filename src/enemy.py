@@ -24,7 +24,7 @@ class Skeleton():
 
         # movement
         self.velocity = 1
-        self.path = [x, x + 50]
+        self.path = [x, x + 32]
 
     def draw_skeleton(self):
         self.animate()
