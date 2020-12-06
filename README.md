@@ -1,8 +1,10 @@
 # Tree Runner
+A 2D side-scroller game built in the pygame library.
 
 ![](https://media.giphy.com/media/DjWpsoyK12YA9ocBAY/giphy.gif)
 
-A 2D side-scroller game built in the pygame library.
+[***Gameplay video***](https://youtu.be/8-aFXi78ioA)
+
 ## How-to
 1. Download and unzip the game
 2. Make sure you have the pygame python module installed
