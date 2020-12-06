@@ -1,6 +1,11 @@
 # Tree Runner
 
 A 2D side-scroller game built in the pygame library.
+## How-to
+1. Download and unzip the game
+2. Make sure you have the pygame python module installed
+3. Run main.py
+4. Enjoy the game
 
 ## Game Vision
 
@@ -27,7 +32,7 @@ You have been on a quest to find the young Yggdrasil. The young world tree. Your
 - ***Woooden Plates*** allow you to saved your current location when you die you respawn at that location
 - ***Boundaries*** if the left boundary catches up to you your dead, if you fall down cliffs your dead
 ## Game Keys
-- ***ESC*** takes you back to the main screen
+- ***ESC*** takes you to the main screen
 - ***P*** pauses the game
 
 ## Uniqueness
@@ -36,3 +41,13 @@ You have been on a quest to find the young Yggdrasil. The young world tree. Your
 - The map is designed to challenge gamers and appeal to their stubborn streak
 - The moving left boundary creates a sense of urgency for the player often resulting in them panicking and making more mistakes than they should
 
+
+## Credits
+
+This game would not have been made possible without the help of these great people below. Please make sure to check them out if you plan to build your own game as well!
+
+- [***Ryan Kazmerik***](https://www.linkedin.com/in/ryan-kazmerik-22049326/) thanks for the great semester of game development
+
+- [***Jesse Munguia***](https://jesse-m.itch.io/jungle-pack) for sharing the amazing jungle pack asset  
+
+- [***DaFluffyPotato***](https://www.youtube.com/channel/UCYNrBrBOgTfHswcz2DdZQFA) and [***Christian Duenas***](https://www.youtube.com/channel/UCB2mKxxXPK3X8SJkAc-db3A) for their amazing pygame videos
